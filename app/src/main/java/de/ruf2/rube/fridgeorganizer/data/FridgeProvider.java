@@ -20,12 +20,14 @@ public class FridgeProvider extends ContentProvider{
     private FridgeDbHelper mOpenHelper;
 
     static final int PRODUCT = 100;
-    static final int PRODUCT_WITH_FRIDGE = 101;
-    static final int PRODUCT_WITH_TYPE = 102;
-    static final int PRODUCT_WITH_BUY_DATE = 103;
-    static final int PRODUCT_WITH_EXP_DATE = 104;
+    static final int PRODUCT_ID = 101;
+    static final int PRODUCT_WITH_FRIDGE = 102;
+    static final int PRODUCT_WITH_TYPE = 103;
+    static final int PRODUCT_WITH_BUY_DATE = 104;
+    static final int PRODUCT_WITH_EXP_DATE = 105;
     static final int PRODUCT_TYPE = 200;
     static final int FRIDGE = 300;
+    static final int FRIDGE_ID = 301;
     static final int FRIDGE_TYPE = 400;
 
     private static final SQLiteQueryBuilder sProductByFridgeQueryBuilder;
@@ -44,6 +46,8 @@ public class FridgeProvider extends ContentProvider{
                         "." + FridgeContract.FridgeEntry._ID);
     }
 
+    //
+
     //TODO: crete remaining selection helper
 
     static UriMatcher buildUriMatcher() {
@@ -58,11 +62,13 @@ public class FridgeProvider extends ContentProvider{
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, FridgeContract.PATH_PRODUCT, PRODUCT);
-        matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/*", PRODUCT_WITH_FRIDGE);
+        matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/#", PRODUCT_ID);
+        matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/#/"+ FridgeContract.PATH_FRIDGE, PRODUCT_WITH_FRIDGE);
         //TODO: finish matching codes
         //matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/*/#", PRODUCT_WITH_EXP_DATE);
 
         matcher.addURI(authority, FridgeContract.PATH_FRIDGE, FRIDGE);
+        matcher.addURI(authority, FridgeContract.PATH_FRIDGE+ "/#", FRIDGE_ID);
         return matcher;
     }
 
@@ -84,17 +90,40 @@ public class FridgeProvider extends ContentProvider{
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] projection, String seleciton, String[] selectionArgss1, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             //TODO: build querys
-            case PRODUCT_WITH_FRIDGE:
-            {
-                retCursor = null;
+            case PRODUCT:{
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        FridgeContract.ProductEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             }
+            case FRIDGE:{
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        FridgeContract.FridgeEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        return null;
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return retCursor;
     }
 
     @Nullable
@@ -105,7 +134,7 @@ public class FridgeProvider extends ContentProvider{
         switch (match) {
             // TODO: correct this when queries finished
             case PRODUCT_WITH_FRIDGE:
-                return FridgeContract.ProductEntry.CONTENT_ITEM_TYPE;
+                return FridgeContract.ProductEntry.CONTENT_TYPE;
             case PRODUCT_WITH_TYPE:
                 return FridgeContract.ProductEntry.CONTENT_TYPE;
             case PRODUCT:
@@ -116,6 +145,10 @@ public class FridgeProvider extends ContentProvider{
                 return FridgeContract.FridgeTypeEntry.CONTENT_TYPE;
             case PRODUCT_TYPE:
                 return FridgeContract.ProductTypeEntry.CONTENT_TYPE;
+            case PRODUCT_ID:
+                return FridgeContract.ProductEntry.CONTENT_ITEM_TYPE;
+            case FRIDGE_ID:
+                return FridgeContract.FridgeEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

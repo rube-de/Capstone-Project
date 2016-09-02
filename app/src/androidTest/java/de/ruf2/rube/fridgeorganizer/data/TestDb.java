@@ -85,6 +85,10 @@ public class TestDb extends AndroidTestCase {
         db.close();
     }
 
+    public void testFridgeTable(){
+        insertFridge();
+    }
+
     public long insertFridge() {
         // First step: Get reference to writable database
         // If there's an error in those massive SQL table creation Strings,
