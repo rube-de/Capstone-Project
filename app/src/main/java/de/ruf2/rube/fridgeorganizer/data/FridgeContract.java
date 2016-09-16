@@ -45,7 +45,7 @@ public class FridgeContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_FRIDGE_TYPE = "fridge_type";
         //order number to determine ordering of the fridges in the gui
-        public static final String COLUMN_ORDER = "order";
+        public static final String COLUMN_ORDER_NUMBER = "order_number";
         public static final String COLUMN_LOCATION = "location";
 
         public static Uri buildFridgeUri(long id) {

@@ -12,7 +12,7 @@ import de.ruf2.rube.fridgeorganizer.data.FridgeContract.FridgeEntry;
 public class FridgeDbHelper extends SQLiteOpenHelper{
 
     // increment the database version, when database schema changes
-    private static final int DATABASE_VERSION = 0;
+    private static final int DATABASE_VERSION = 1 ;
 
     static final String DATABASE_NAME = "fridge.db";
 
@@ -22,13 +22,13 @@ public class FridgeDbHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_FRIDGE_TABLE = "CREATE TABLE " + FridgeEntry.TABLE_NAME + " (" +
-                FridgeEntry._ID + " INTEGER PRIMARY KEY," +
-                FridgeEntry.COLUMN_NAME + " TEXT NOT NULL," +
-                FridgeEntry.COLUMN_FRIDGE_TYPE + " INTEGER ," +
-                FridgeEntry.COLUMN_ORDER + " INTEGER NOT NULL," +
-                FridgeEntry.COLUMN_LOCATION + " TEXT NOT NULL " +
+                FridgeEntry._ID + " INTEGER PRIMARY KEY, " +
+                FridgeEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                FridgeEntry.COLUMN_FRIDGE_TYPE + " INTEGER, " +
+                FridgeEntry.COLUMN_ORDER_NUMBER + " INTEGER NOT NULL, " +
+                FridgeEntry.COLUMN_LOCATION + " TEXT NOT NULL, " +
                 " FOREIGN KEY (" + FridgeEntry.COLUMN_FRIDGE_TYPE + ") REFERENCES " +
-                FridgeContract.FridgeTypeEntry.TABLE_NAME + " (" + FridgeContract.FridgeTypeEntry._ID + "), " +
+                FridgeContract.FridgeTypeEntry.TABLE_NAME + "(" + FridgeContract.FridgeTypeEntry._ID + ") " +
                 " );";
 
         final String SQL_CREATE_PRODUCT_TABLE = "CREATE TABLE " + FridgeContract.ProductEntry.TABLE_NAME +" (" +
@@ -38,14 +38,14 @@ public class FridgeDbHelper extends SQLiteOpenHelper{
                 FridgeContract.ProductEntry.COLUMN_PRODUCT_TYPE + " INTEGER," +
                 FridgeContract.ProductEntry.COLUMN_AMOUNT + " INTEGER NOT NULL," +
                 FridgeContract.ProductEntry.COLUMN_BUY_DATE + " INTEGER NOT NULL," +
-                FridgeContract.ProductEntry.COLUMN_EXPIRE_DATE + " INTEGER NOT NULL " +
+                FridgeContract.ProductEntry.COLUMN_EXPIRE_DATE + " INTEGER NOT NULL, " +
 
                 // Set up the fridge column as a foreign key to fridge table.
                 " FOREIGN KEY (" + FridgeContract.ProductEntry.COLUMN_FRIDGE_KEY + ") REFERENCES " +
-                FridgeEntry.TABLE_NAME + " (" + FridgeEntry._ID + "), " +
+                FridgeEntry.TABLE_NAME + "(" + FridgeEntry._ID + "), " +
 
                 " FOREIGN KEY (" + FridgeContract.ProductEntry.COLUMN_PRODUCT_TYPE + ") REFERENCES " +
-                FridgeContract.ProductTypeEntry.TABLE_NAME + " (" + FridgeContract.ProductEntry._ID + "), " +
+                FridgeContract.ProductTypeEntry.TABLE_NAME + " (" + FridgeContract.ProductEntry._ID + ") " +
 
                 " );";
 

@@ -36,6 +36,7 @@ public class TestDb extends AndroidTestCase {
         tableNameHashSet.add(FridgeContract.ProductEntry.TABLE_NAME);
         tableNameHashSet.add(FridgeContract.FridgeEntry.TABLE_NAME);
 
+
         mContext.deleteDatabase(FridgeDbHelper.DATABASE_NAME);
         SQLiteDatabase db = new FridgeDbHelper(
                 this.mContext).getWritableDatabase();
@@ -69,7 +70,7 @@ public class TestDb extends AndroidTestCase {
         fridgeColumnHashSet.add(FridgeContract.FridgeEntry._ID);
         fridgeColumnHashSet.add(FridgeContract.FridgeEntry.COLUMN_NAME);
         fridgeColumnHashSet.add(FridgeContract.FridgeEntry.COLUMN_FRIDGE_TYPE);
-        fridgeColumnHashSet.add(FridgeContract.FridgeEntry.COLUMN_ORDER);
+        fridgeColumnHashSet.add(FridgeContract.FridgeEntry.COLUMN_ORDER_NUMBER);
         fridgeColumnHashSet.add(FridgeContract.FridgeEntry.COLUMN_LOCATION);
 
         int columnNameIndex = c.getColumnIndex("name");
@@ -100,7 +101,7 @@ public class TestDb extends AndroidTestCase {
         ContentValues testValues = new ContentValues();
         testValues.put(FridgeContract.FridgeEntry.COLUMN_NAME, "Fridge1");
         testValues.put(FridgeContract.FridgeEntry.COLUMN_FRIDGE_TYPE, 1);
-        testValues.put(FridgeContract.FridgeEntry.COLUMN_ORDER, 0);
+        testValues.put(FridgeContract.FridgeEntry.COLUMN_ORDER_NUMBER, 1);
         testValues.put(FridgeContract.FridgeEntry.COLUMN_LOCATION, "Kitchen");
 
 
