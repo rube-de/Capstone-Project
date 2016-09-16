@@ -18,11 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name=".data.FridgeProvider"
             android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
+
+        <activity
+            android:name=".NavigationDrawerActivity"
+            android:label="@string/title_activity_navigation_drawer"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
