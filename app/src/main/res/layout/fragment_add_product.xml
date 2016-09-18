@@ -7,29 +7,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner2" />
-        </RelativeLayout>
         <TextView
             android:layout_width="@dimen/text_view_add_product_label_width"
             android:layout_height="@dimen/text_view_add_product_label_height"
-            android:text="Add Prdouct"/>
+            android:text="Select Fridge"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:id="@+id/fridge_spinner" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="New Fridge"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="@dimen/text_view_add_product_label_width"
+            android:layout_height="@dimen/text_view_add_product_label_height"
+            android:text="Select Product Type"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:id="@+id/product_type_spinner" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="New Product Type"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="@dimen/text_view_add_product_label_width"
+            android:layout_height="@dimen/text_view_add_product_label_height"
+            android:text=" Product Name"/>
         <EditText
             android:layout_width="@dimen/edit_text_add_product_width"
             android:layout_height="@dimen/edit_text_add_product_height" />
@@ -65,6 +89,22 @@
             </LinearLayout>
 
         </LinearLayout>
+        <TextView
+            android:layout_width="@dimen/text_view_add_product_label_width"
+            android:layout_height="@dimen/text_view_add_product_label_height"
+            android:text="Amount"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/amount_spinner" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/adding_product_button"
+            android:text="Add Product"/>
+
+
     </LinearLayout>
 
 

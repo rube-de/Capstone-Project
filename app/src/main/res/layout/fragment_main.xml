@@ -10,25 +10,22 @@
     tools:showIn="@layout/activity_main"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
-        <EditText
-            android:layout_width="@dimen/text_field_search_width"
-            android:layout_height="@dimen/text_field_search_height"
-            android:id="@+id/editText"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+        <!--<EditText-->
+            <!--android:layout_width="@dimen/text_field_search_width"-->
+            <!--android:layout_height="@dimen/text_field_search_height"-->
+            <!--android:id="@+id/editText"/>-->
 
-        <ImageButton
-            android:layout_width="@dimen/button_search_width"
-            android:layout_height="@dimen/button_search_height"
-            android:id="@+id/imageButton"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/editText" />
+        <!--<ImageButton-->
+            <!--android:layout_width="@dimen/button_search_width"-->
+            <!--android:layout_height="@dimen/button_search_height"-->
+            <!--android:id="@+id/imageButton"/>-->
 
-    </RelativeLayout>
+    <!--</LinearLayout>-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,10 +33,9 @@
         android:id="@+id/text_view_recent_fridges"
         android:text="@string/recent_fridges"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView" />
-
+    <!--<ListView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/listView" />-->
 
 </LinearLayout>

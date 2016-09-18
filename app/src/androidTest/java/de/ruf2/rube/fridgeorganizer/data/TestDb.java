@@ -134,11 +134,11 @@ public class TestDb extends AndroidTestCase {
         // Fifth Step: Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
-        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+        TestUtilities.validateCurrentRecord("Error: Fridge Query Validation Failed",
                 cursor, testValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
-        assertFalse( "Error: More than one record returned from location query",
+        assertFalse( "Error: More than one record returned from fridge query",
                 cursor.moveToNext() );
 
         // Sixth Step: Close Cursor and Database

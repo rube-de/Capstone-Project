@@ -1,10 +1,9 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_container"
-    android:name="de.ruf2.rube.fridgeorganizer.MainActivityFragment"
+    android:id="@+id/fragment"
+    android:name="de.ruf2.rube.fridgeorganizer.AddProductFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:layout="@layout/fragment_main" />
-
+    tools:layout="@layout/fragment_add_product" />
