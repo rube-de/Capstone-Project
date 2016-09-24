@@ -8,11 +8,13 @@
     <dimen name="button_search_width">40dp</dimen>
     <dimen name="button_search_height">40dp</dimen>
     <dimen name="text_view_add_product_label_width">300dp</dimen>
-    <dimen name="text_view_add_product_label_height">30dp</dimen>
+    <dimen name="text_view_add_product_label_height">40dp</dimen>
     <dimen name="edit_text_add_product_width">300dp</dimen>
-    <dimen name="edit_text_add_product_height">30dp</dimen>
+    <dimen name="edit_text_add_product_height">40dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="button_add_width">100dp</dimen>
+
 
 </resources>

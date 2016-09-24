@@ -33,6 +33,14 @@
         android:id="@+id/text_view_recent_fridges"
         android:text="@string/recent_fridges"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_new_fridge_main_fragment"
+        android:onClick="clickNewFridge"
+        android:text="@string/button_add_fridge"/>
+
+
     <!--<ListView-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
