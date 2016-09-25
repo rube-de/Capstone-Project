@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,12 +20,21 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import timber.log.Timber;
+
 public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     protected final String TAG = getClass().getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+
+    private Realm mRealm;
+    private RealmConfiguration mRealmConfig;
+
+    private RecyclerView mFridgeRecyclerView;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -34,10 +44,12 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.plant(new Timber.DebugTree());
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mRealm = Realm.getDefaultInstance();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -69,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
              */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-//                getActionBar().setTitle(mDrawerTitle);
+                getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -105,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
         }
+
     }
+
 
 //    /* Called whenever we call invalidateOptionsMenu() */
 //    @Override
@@ -215,6 +229,12 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
     }
     public void clickNewFridge(View view) {
         AddFridgeFragment newFragment = new AddFridgeFragment();

@@ -33,6 +33,11 @@
         android:id="@+id/text_view_recent_fridges"
         android:text="@string/recent_fridges"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_fridge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

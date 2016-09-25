@@ -1,14 +1,11 @@
 package de.ruf2.rube.fridgeorganizer;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +16,9 @@ import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
-import de.ruf2.rube.fridgeorganizer.data.FridgeDbHelper;
+import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
+import io.realm.Realm;
+import timber.log.Timber;
 
 
 /**
@@ -40,6 +38,8 @@ public class AddFridgeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private Activity mContext;
+
+    private Realm mRealm;
 
     public AddFridgeFragment() {
         // Required empty public constructor
@@ -64,9 +64,16 @@ public class AddFridgeFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mRealm = Realm.getDefaultInstance();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -108,6 +115,13 @@ public class AddFridgeFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mRealm.close();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -125,7 +139,7 @@ public class AddFridgeFragment extends Fragment {
 
     @OnClick(R.id.button_add_fridge)
     public void onClickCreateFridge(View view){
-        Log.d(TAG, " create fridge from favs");
+        Timber.d(" create fridge from favs");
         //hide soft keyboard
         InputMethodManager inputManager = (InputMethodManager)
                 mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -135,19 +149,16 @@ public class AddFridgeFragment extends Fragment {
         String fridgeName = mEditTextNewFridge.getText().toString();
 
         // Get reference to writable database
-        FridgeDbHelper dbHelper = new FridgeDbHelper(mContext);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        mRealm.beginTransaction();
 
-        // Create ContentValues of new fridge
-        ContentValues fridgeValues = new ContentValues();
-        fridgeValues.put(FridgeContract.FridgeEntry.COLUMN_NAME, fridgeName);
-        fridgeValues.put(FridgeContract.FridgeEntry.COLUMN_FRIDGE_TYPE, 1);
-        fridgeValues.put(FridgeContract.FridgeEntry.COLUMN_ORDER_NUMBER, 1);
-        fridgeValues.put(FridgeContract.FridgeEntry.COLUMN_LOCATION, "Kitchen");
+        //Create realm object
+        Fridge fridge = mRealm.createObject(Fridge.class);
 
+        //Set fields
+        fridge.setName(fridgeName);
 
-        //insert into fridge db
-        db.insert(FridgeContract.FridgeEntry.TABLE_NAME, null, fridgeValues);
+        //insert fridge into db
+        mRealm.commitTransaction();
 
         Snackbar.make(view, "new fridge created: " + fridgeName, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
