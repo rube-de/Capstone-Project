@@ -23,33 +23,34 @@
                 android:layout_weight="2"
                 android:id="@+id/fridge_spinner" />
             <Button
+                android:id="@+id/button_new_fridge_product_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="New Fridge"
                 android:layout_gravity="center"/>
         </LinearLayout>
-        <TextView
-            android:layout_width="@dimen/text_view_add_product_label_width"
-            android:layout_height="@dimen/text_view_add_product_label_height"
-            android:text="Select Product Type"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <!--<TextView-->
+            <!--android:layout_width="@dimen/text_view_add_product_label_width"-->
+            <!--android:layout_height="@dimen/text_view_add_product_label_height"-->
+            <!--android:text="Select Product Type"/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-            <Spinner
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:id="@+id/product_type_spinner" />
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="New Product Type"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+            <!--<Spinner-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="2"-->
+                <!--android:id="@+id/product_type_spinner" />-->
+            <!--<Button-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="New Product Type"-->
+                <!--android:layout_gravity="center"/>-->
+        <!--</LinearLayout>-->
         <TextView
             android:layout_width="@dimen/text_view_add_product_label_width"
             android:layout_height="@dimen/text_view_add_product_label_height"
@@ -62,29 +63,33 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
                 <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="@dimen/text_view_add_product_label_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Buy Date"/>
                 <EditText
-                    android:layout_width="100dp"
-                    android:layout_height="@dimen/edit_text_add_product_height" />
+                    android:id="@+id/edit_text_buy_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
                 <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="@dimen/text_view_add_product_label_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Expire Date"/>
                 <EditText
-                    android:layout_width="100dp"
-                    android:layout_height="@dimen/edit_text_add_product_height" />
+                    android:id="@+id/edit_text_expire_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -93,10 +98,12 @@
             android:layout_width="@dimen/text_view_add_product_label_width"
             android:layout_height="@dimen/text_view_add_product_label_height"
             android:text="Amount"/>
-        <Spinner
+
+        <NumberPicker
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/amount_spinner" />
+            android:layout_height="40dp"
+            android:id="@+id/numberPicker" />
+
 
         <Button
             android:layout_width="match_parent"

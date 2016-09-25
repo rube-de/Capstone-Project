@@ -1,13 +1,25 @@
 package de.ruf2.rube.fridgeorganizer;
 
 
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -18,7 +30,17 @@ import android.view.ViewGroup;
  * Use the {@link AddProductFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddProductFragment extends Fragment {
+public class AddProductFragment extends Fragment implements OnClickListener{
+    @Bind(R.id.edit_text_buy_date)
+    EditText mEditTextBuyDate;
+    @Bind(R.id.edit_text_expire_date)
+    EditText mEditTextExpireDate;
+
+    private DatePickerDialog mBuyDatePickerDialog;
+    private DatePickerDialog mExpireDatePickerDialog;
+
+    private SimpleDateFormat mDateFormatter;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,7 +87,13 @@ public class AddProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_product, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_product, container, false);
+        ButterKnife.bind(this, view);
+        mDateFormatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
+
+        setDateTimeField();
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -92,6 +120,15 @@ public class AddProductFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+        if(view == mEditTextBuyDate) {
+            mBuyDatePickerDialog.show();
+        } else if(view == mEditTextExpireDate) {
+            mExpireDatePickerDialog.show();
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -105,5 +142,31 @@ public class AddProductFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void setDateTimeField() {
+        mEditTextExpireDate.setOnClickListener(this);
+        mEditTextBuyDate.setOnClickListener(this);
+
+        Calendar newCalendar = Calendar.getInstance();
+        mBuyDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                mEditTextBuyDate.setText(mDateFormatter.format(newDate.getTime()));
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        mExpireDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                mEditTextExpireDate.setText(mDateFormatter.format(newDate.getTime()));
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 }
