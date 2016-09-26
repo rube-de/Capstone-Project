@@ -8,8 +8,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <TextView
-            android:layout_width="@dimen/text_view_add_product_label_width"
-            android:layout_height="@dimen/text_view_add_product_label_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Select Fridge"/>
 
         <LinearLayout
@@ -21,14 +21,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:id="@+id/fridge_spinner" />
+                android:id="@+id/spinner_fridge" />
             <Button
                 android:id="@+id/button_new_fridge_product_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="New Fridge"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:onClick="clickNewFridge"/>
         </LinearLayout>
         <!--<TextView-->
             <!--android:layout_width="@dimen/text_view_add_product_label_width"-->
@@ -52,12 +53,13 @@
                 <!--android:layout_gravity="center"/>-->
         <!--</LinearLayout>-->
         <TextView
-            android:layout_width="@dimen/text_view_add_product_label_width"
-            android:layout_height="@dimen/text_view_add_product_label_height"
-            android:text=" Product Name"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/product_name"/>
         <EditText
+            android:id="@+id/edit_text_product_name"
             android:layout_width="@dimen/edit_text_add_product_width"
-            android:layout_height="@dimen/edit_text_add_product_height" />
+            android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,20 +98,20 @@
         </LinearLayout>
         <TextView
             android:layout_width="@dimen/text_view_add_product_label_width"
-            android:layout_height="@dimen/text_view_add_product_label_height"
+            android:layout_height="wrap_content"
             android:text="Amount"/>
 
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:id="@+id/numberPicker" />
-
+        <EditText
+            android:id="@+id/edit_text_product_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/adding_product_button"
-            android:text="Add Product"/>
+            android:id="@+id/button_add_product"
+            android:text="Add Product"
+            android:onClick="clickAddProduct"/>
 
 
     </LinearLayout>
