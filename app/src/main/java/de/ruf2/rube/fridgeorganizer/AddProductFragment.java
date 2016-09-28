@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,10 +46,10 @@ import timber.log.Timber;
  * create an instance of this fragment.
  */
 public class AddProductFragment extends Fragment implements OnClickListener {
-    @Bind(R.id.edit_text_buy_date)
-    EditText mEditTextBuyDate;
-    @Bind(R.id.edit_text_expire_date)
-    EditText mEditTextExpireDate;
+    @Bind(R.id.text_view_buy_date)
+    TextView mTextViewBuyDate;
+    @Bind(R.id.text_view_expire_date)
+    TextView mTextViewExpireDate;
     @Bind(R.id.edit_text_product_name)
     EditText mEditTextProductName;
     @Bind(R.id.edit_text_product_amount)
@@ -169,9 +170,9 @@ public class AddProductFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view == mEditTextBuyDate) {
+        if (view == mTextViewBuyDate) {
             mBuyDatePickerDialog.show();
-        } else if (view == mEditTextExpireDate) {
+        } else if (view == mTextViewExpireDate) {
             mExpireDatePickerDialog.show();
         }
     }
@@ -184,8 +185,8 @@ public class AddProductFragment extends Fragment implements OnClickListener {
         try {
             //get product values
             String productName = mEditTextProductName.getText().toString();
-            Date buyDate = mDateFormatter.parse(mEditTextBuyDate.getText().toString());
-            Date expireDate = mDateFormatter.parse(mEditTextExpireDate.getText().toString());
+            Date buyDate = mDateFormatter.parse(mTextViewBuyDate.getText().toString());
+            Date expireDate = mDateFormatter.parse(mTextViewExpireDate.getText().toString());
             int amount = Integer.parseInt(mEditTextProductAmount.getText().toString());
             Fridge fridge = (Fridge) mSpinnerFridge.getSelectedItem();
 
@@ -241,8 +242,8 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     }
 
     private void setDateTimeField() {
-        mEditTextExpireDate.setOnClickListener(this);
-        mEditTextBuyDate.setOnClickListener(this);
+        mTextViewExpireDate.setOnClickListener(this);
+        mTextViewBuyDate.setOnClickListener(this);
 
         Calendar newCalendar = Calendar.getInstance();
         mBuyDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
@@ -250,7 +251,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                mEditTextBuyDate.setText(mDateFormatter.format(newDate.getTime()));
+                mTextViewBuyDate.setText(mDateFormatter.format(newDate.getTime()));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -260,7 +261,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                mEditTextExpireDate.setText(mDateFormatter.format(newDate.getTime()));
+                mTextViewExpireDate.setText(mDateFormatter.format(newDate.getTime()));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));

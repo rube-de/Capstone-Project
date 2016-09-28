@@ -73,10 +73,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Buy Date"/>
-                <EditText
-                    android:id="@+id/edit_text_buy_date"
+                <TextView
+                    android:id="@+id/text_view_buy_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/select"/>
 
             </LinearLayout>
             <LinearLayout
@@ -88,10 +89,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Expire Date"/>
-                <EditText
-                    android:id="@+id/edit_text_expire_date"
+                <TextView
+                    android:id="@+id/text_view_expire_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/select"/>
 
             </LinearLayout>
 

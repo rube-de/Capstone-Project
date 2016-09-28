@@ -13,4 +13,5 @@
     <string name="title_activity_add_product">Add Product</string>
     <string name="button_add_fridge">Add Fridge</string>
     <string name="product_name">Product Name</string>
+    <string name="select">Select</string>
 </resources>
