@@ -26,9 +26,8 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mRealm = Realm.getDefaultInstance();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
+    public void onDestroyView() {
         super.onStop();
         mRealm.close();
     }

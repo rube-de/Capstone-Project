@@ -9,10 +9,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -27,8 +29,10 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
 import de.ruf2.rube.fridgeorganizer.data.entities.Product;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import timber.log.Timber;
 
 
@@ -52,7 +56,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     @Bind(R.id.spinner_fridge)
     Spinner mSpinnerFridge;
     @Bind(R.id.button_new_fridge_product_fragment)
-    Button mButtonNewFrige;
+    Button mButtonNewFridge;
 
     private Realm mRealm;
 
@@ -60,6 +64,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
 
     private DatePickerDialog mBuyDatePickerDialog;
     private DatePickerDialog mExpireDatePickerDialog;
+
 
     private SimpleDateFormat mDateFormatter;
 
@@ -96,11 +101,6 @@ public class AddProductFragment extends Fragment implements OnClickListener {
         return fragment;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mRealm = Realm.getDefaultInstance();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +110,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mContext = getActivity();
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -118,9 +119,18 @@ public class AddProductFragment extends Fragment implements OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_product, container, false);
         ButterKnife.bind(this, view);
+        mRealm = Realm.getDefaultInstance();
+
         mDateFormatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
 
         setDateTimeField();
+
+        //init fridge spinner
+        RealmResults<Fridge> fridges = mRealm.where(Fridge.class).findAll();
+        ArrayAdapter<Fridge> fridgeAdapter = new ArrayAdapter<>(getActivity(), R.layout.sipmle_spinner_dropdown_item, fridges);
+        fridgeAdapter.setDropDownViewResource(R.layout.sipmle_spinner_dropdown_item);
+
+        mSpinnerFridge.setAdapter(fridgeAdapter);
 
         return view;
     }
@@ -153,14 +163,9 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-    }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
         mRealm.close();
     }
+
 
     @Override
     public void onClick(View view) {
@@ -182,7 +187,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             Date buyDate = mDateFormatter.parse(mEditTextBuyDate.getText().toString());
             Date expireDate = mDateFormatter.parse(mEditTextExpireDate.getText().toString());
             int amount = Integer.parseInt(mEditTextProductAmount.getText().toString());
-//            Fridge fridge = mSpinnerFridge
+            Fridge fridge = (Fridge) mSpinnerFridge.getSelectedItem();
 
 
 
@@ -197,6 +202,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             product.setAmount(amount);
             product.setBuyDate(buyDate);
             product.setExpireDate(expireDate);
+            product.setFridge(fridge);
 
             //insert fridge into db
             mRealm.commitTransaction();
@@ -208,6 +214,16 @@ public class AddProductFragment extends Fragment implements OnClickListener {
         }
 
     }
+
+    @OnClick(R.id.button_new_fridge_product_fragment)
+    public void onClickNewFridge(View view) {
+        AddFridgeFragment newFragment = new AddFridgeFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container_product, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

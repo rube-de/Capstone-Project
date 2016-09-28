@@ -94,8 +94,12 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        initFrameContainer(savedInstanceState);
 
 
+    }
+
+    private void initFrameContainer(Bundle savedInstanceState) {
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
         if (findViewById(R.id.fragment_container) != null) {
@@ -117,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
         }
-
     }
 
 
