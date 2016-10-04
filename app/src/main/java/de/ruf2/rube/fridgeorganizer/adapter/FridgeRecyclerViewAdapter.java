@@ -1,6 +1,7 @@
 package de.ruf2.rube.fridgeorganizer.adapter;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import de.ruf2.rube.fridgeorganizer.R;
 import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
+import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
@@ -47,7 +49,17 @@ public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, 
 
         @Override
         public boolean onLongClick(View v) {
-//            activity.deleteFridgeItem(data);
+            Snackbar.make(v, "deleted fridge: " + data.getName() , Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            Realm realm = Realm.getDefaultInstance();
+            // All changes to data must happen in a transaction
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    // remove a single object
+                    data.deleteFromRealm();
+                }
+            });
             return true;
         }
     }

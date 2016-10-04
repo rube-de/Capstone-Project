@@ -50,7 +50,7 @@ public class MainActivityFragment extends Fragment {
 
     private void setUpRecyclerView() {
         mFridgeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mFridgeRecyclerView.setAdapter(new FridgeRecyclerViewAdapter(getActivity(), mRealm.where(Fridge.class).findAllAsync()));
+        mFridgeRecyclerView.setAdapter(new FridgeRecyclerViewAdapter(getActivity(), mRealm.where(Fridge.class).findAll()));
         mFridgeRecyclerView.setHasFixedSize(true);
         mFridgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }
