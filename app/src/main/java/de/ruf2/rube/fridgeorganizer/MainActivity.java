@@ -24,7 +24,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     protected final String TAG = getClass().getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;

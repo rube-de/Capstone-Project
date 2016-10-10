@@ -30,13 +30,12 @@ import timber.log.Timber;
  * create an instance of this fragment.
  */
 public class AddFridgeFragment extends Fragment {
-    protected final String TAG = getClass().getSimpleName();
     @Bind(R.id.button_add_fridge)
     Button mButtonAdd;
     @Bind(R.id.edit_text_new_fridge_name)
     EditText mEditTextNewFridge;
 
-    private OnFragmentInteractionListener mListener;
+        private OnFragmentInteractionListener mListener;
     private Activity mContext;
 
     private Realm mRealm;
