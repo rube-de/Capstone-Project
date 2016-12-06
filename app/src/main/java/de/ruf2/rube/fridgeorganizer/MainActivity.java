@@ -10,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +20,6 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
@@ -32,9 +30,8 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
     private CharSequence mTitle;
 
     private Realm mRealm;
-    private RealmConfiguration mRealmConfig;
 
-    private RecyclerView mFridgeRecyclerView;
+    public final static String FRIDGE_KEY = "fridgekey";
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.

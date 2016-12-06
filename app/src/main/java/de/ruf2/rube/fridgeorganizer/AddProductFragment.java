@@ -191,20 +191,18 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             Fridge fridge = (Fridge) mSpinnerFridge.getSelectedItem();
 
 
-
-            // Get reference to writable database
-            mRealm.beginTransaction();
-
-            //Create realm object
-            Product product = mRealm.createObject(Product.class);
-
             //Set fields
+            Product product = new Product();
             product.setName(productName);
             product.setAmount(amount);
             product.setBuyDate(buyDate);
             product.setExpireDate(expireDate);
             product.setFridge(fridge);
 
+            // Get reference to writable database
+            mRealm.beginTransaction();
+            //Create realm object
+            mRealm.copyToRealm(product);
             //insert fridge into db
             mRealm.commitTransaction();
 

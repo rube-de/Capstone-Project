@@ -147,15 +147,15 @@ public class AddFridgeFragment extends Fragment {
         //get fridge values
         String fridgeName = mEditTextNewFridge.getText().toString();
 
-        // Get reference to writable database
-        mRealm.beginTransaction();
-
-        //Create realm object
-        Fridge fridge = mRealm.createObject(Fridge.class);
 
         //Set fields
+        Fridge fridge = new Fridge();
         fridge.setName(fridgeName);
 
+        // Get reference to writable database
+        mRealm.beginTransaction();
+        //Create realm object
+        mRealm.copyToRealm(fridge);
         //insert fridge into db
         mRealm.commitTransaction();
 

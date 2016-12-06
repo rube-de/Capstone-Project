@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
 import de.ruf2.rube.fridgeorganizer.data.entities.Product;
@@ -28,19 +27,26 @@ public class FridgeFragment extends Fragment {
     private RecyclerView mProductRecyclerView;
 
     private OnFragmentInteractionListener mListener;
-    
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mRealm = Realm.getDefaultInstance();
+    private static final String FRIDGE_ID = "fridgeId";
+    private String mFridgeId;
+
+    public FridgeFragment() {
+    }
+
+    public static FridgeFragment newInstance(String fridgeId) {
+        FridgeFragment fragment = new FridgeFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(FRIDGE_ID, fridgeId);
+        fragment.setArguments(arguments);
+        return fragment;
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
-        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -48,7 +54,8 @@ public class FridgeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_fridge, container, false);
-        ButterKnife.bind(this, fragmentView);
+        mRealm = Realm.getDefaultInstance();
+
         //Set up fridge list
         mProductRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view_product);
         setUpRecyclerView();
@@ -81,15 +88,10 @@ public class FridgeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-    
-    
-    @Override
-    public void onStop() {
-        super.onStop();
+
         mRealm.close();
     }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

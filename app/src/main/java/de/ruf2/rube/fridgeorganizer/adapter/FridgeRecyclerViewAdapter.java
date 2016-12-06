@@ -21,14 +21,14 @@ import timber.log.Timber;
 /**
  * Created by Bernhard Ruf on 25.09.2016.
  */
-public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, FridgeRecyclerViewAdapter.MyViewHolder>  {
+public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, FridgeRecyclerViewAdapter.MyViewHolder> {
     private final FragmentActivity mContext;
 
     private final PublishSubject<Fridge> onClickSubject = PublishSubject.create();
 
 
-    public FridgeRecyclerViewAdapter(FragmentActivity context, RealmResults<Fridge> data){
-        super(context, data,true);
+    public FridgeRecyclerViewAdapter(FragmentActivity context, RealmResults<Fridge> data) {
+        super(context, data, true);
         this.mContext = context;
     }
 
@@ -50,20 +50,21 @@ public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, 
 
                 Timber.d("on click called: " + fridge.getName());
 
+//                FridgeFragment newFragment = FridgeFragment.newInstance(fridge.getId());
                 FridgeFragment newFragment = new FridgeFragment();
-            FragmentTransaction transaction = mContext.getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+                FragmentTransaction transaction = mContext.getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
     }
 
-    public Observable<Fridge> getPositionClicks(){
+    public Observable<Fridge> getPositionClicks() {
         return onClickSubject.asObservable();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public TextView fridgeName;
         public Fridge data;
 
@@ -73,19 +74,10 @@ public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, 
             view.setOnLongClickListener(this);
         }
 
-//        @Override
-//        public void onClick(View view) {
-//            Timber.d("on click frdige called");
-//            FridgeFragment newFragment = new FridgeFragment();
-//            FragmentTransaction transaction = mContext.getSupportFragmentManager().beginTransaction();
-//            transaction.replace(R.id.fragment_container, newFragment);
-//            transaction.addToBackStack(null);
-//            transaction.commit();
-//        }
 
         @Override
         public boolean onLongClick(View v) {
-            Snackbar.make(v, "deleted fridge: " + data.getName() , Snackbar.LENGTH_LONG)
+            Snackbar.make(v, "deleted fridge: " + data.getName(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             Realm realm = Realm.getDefaultInstance();
             // All changes to data must happen in a transaction
