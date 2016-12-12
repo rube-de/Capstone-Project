@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
+import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
 import de.ruf2.rube.fridgeorganizer.data.entities.Product;
 import io.realm.Realm;
 
@@ -29,15 +30,16 @@ public class FridgeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private static final String FRIDGE_ID = "fridgeId";
-    private String mFridgeId;
+    private Integer mFridgeId;
+    private Fridge mFridge;
 
     public FridgeFragment() {
     }
 
-    public static FridgeFragment newInstance(String fridgeId) {
+    public static FridgeFragment newInstance(Integer fridgeId) {
         FridgeFragment fragment = new FridgeFragment();
         Bundle arguments = new Bundle();
-        arguments.putString(FRIDGE_ID, fridgeId);
+        arguments.putInt(FRIDGE_ID, fridgeId);
         fragment.setArguments(arguments);
         return fragment;
 
@@ -54,7 +56,11 @@ public class FridgeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_fridge, container, false);
+        //get Realm and fridge
         mRealm = Realm.getDefaultInstance();
+        mFridgeId = getArguments().getInt(FRIDGE_ID);
+        mFridge = mRealm.where(Fridge.class)
+                .equalTo("_id", mFridgeId).findFirst();
 
         //Set up fridge list
         mProductRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view_product);
@@ -99,7 +105,7 @@ public class FridgeFragment extends Fragment {
 
     private void setUpRecyclerView() {
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), mRealm.where(Product.class).findAll()));
+        mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), mRealm.where(Product.class).equalTo("fridge._id", mFridgeId).findAll()));
         mProductRecyclerView.setHasFixedSize(true);
         mProductRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }

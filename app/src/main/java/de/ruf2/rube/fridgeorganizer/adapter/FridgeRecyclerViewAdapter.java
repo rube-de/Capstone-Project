@@ -50,8 +50,7 @@ public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, 
 
                 Timber.d("on click called: " + fridge.getName());
 
-//                FridgeFragment newFragment = FridgeFragment.newInstance(fridge.getId());
-                FridgeFragment newFragment = new FridgeFragment();
+                FridgeFragment newFragment = FridgeFragment.newInstance(fridge.getId());
                 FragmentTransaction transaction = mContext.getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
