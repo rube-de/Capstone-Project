@@ -1,5 +1,6 @@
 package de.ruf2.rube.fridgeorganizer;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -22,12 +24,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import io.realm.Realm;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, SearchResultFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, SearchResultFragment.OnFragmentInteractionListener, ExpiringProductsFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     protected final String TAG = getClass().getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+
+    private Activity mContext;
 
     private Realm mRealm;
 
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.plant(new Timber.DebugTree());
+        mContext = this;
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
 
         mTitle = mDrawerTitle = getTitle().toString();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
              */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                Utilities.hideKeyboard(mContext);
                 getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
@@ -87,6 +94,21 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         mDrawerToggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        LinearLayout linearLayout = (LinearLayout)headerView.findViewById(R.id.nav_header);
+        linearLayout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Timber.d("onclick header");
+                MainActivityFragment newFragment = new MainActivityFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                }
+        });
+
         navigationView.setNavigationItemSelectedListener(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -166,28 +188,43 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         //you can leave it empty
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_search_product) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_expiring) {
+            Timber.d("onClickSearchProduct");
+            ExpiringProductsFragment newFragment = new ExpiringProductsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_scan) {
 
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_add_product) {
+            Intent addIntent = new Intent();
+            addIntent.setClass(getApplicationContext(), AddProductActivity.class);
+            startActivity(addIntent);
+        } else if (id == R.id.nav_add_fridge) {
+            AddFridgeFragment newFragment = new AddFridgeFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else if (id == R.id.nav_settings) {
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -236,15 +273,6 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         super.onDestroy();
         mRealm.close();
     }
-    public void clickNewFridge(View view) {
-        AddFridgeFragment newFragment = new AddFridgeFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-
 
 
 }

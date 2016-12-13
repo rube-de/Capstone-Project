@@ -64,6 +64,15 @@ public class MainActivityFragment extends Fragment {
         mFridgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }
 
+
+    @OnClick(R.id.button_new_fridge_main_fragment)
+    public void clickNewFridge(View view) {
+        AddFridgeFragment newFragment = new AddFridgeFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
     @OnClick(R.id.image_button_search)
     public void onClickSearchProduct(View view) {
         Timber.d("onClickSearchProduct");

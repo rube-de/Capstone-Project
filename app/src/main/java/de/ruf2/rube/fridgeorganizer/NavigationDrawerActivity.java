@@ -1,8 +1,10 @@
 package de.ruf2.rube.fridgeorganizer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -80,14 +82,23 @@ public class NavigationDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_search_product) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_expiring) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_scan) {
 
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_add_product) {
+            Intent addIntent = new Intent();
+            addIntent.setClass(getApplicationContext(), AddProductActivity.class);
+            startActivity(addIntent);
+        } else if (id == R.id.nav_add_fridge) {
+            AddFridgeFragment newFragment = new AddFridgeFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else if (id == R.id.nav_settings) {
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
