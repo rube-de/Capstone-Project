@@ -14,4 +14,11 @@
     <string name="button_add_fridge">Add Fridge</string>
     <string name="product_name">Product Name</string>
     <string name="select">Select</string>
+    <string name="product_amount">Amount</string>
+    <string name="expiry_date">Expiry Date</string>
+    <string name="add_product">Add Product</string>
+    <string name="buy_date">Buy Date</string>
+    <string name="new_fridge">New Fridge</string>
+    <string name="select_fridge">Select Fridge</string>
+    <string name="fridge_name">Fridge Name</string>
 </resources>

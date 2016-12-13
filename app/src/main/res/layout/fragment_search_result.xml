@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="de.ruf2.rube.fridgeorganizer.SearchResultFragment">
 
-    <TextView
-        android:id="@+id/text_view_fragment_fridge_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,6 +14,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/product_name"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fridge_name"
             android:textStyle="bold"/>
 
         <TextView
@@ -40,6 +44,9 @@
         android:id="@+id/recycler_view_product"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+        android:layout_weight="1"
+        >
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

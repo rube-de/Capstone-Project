@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import de.ruf2.rube.fridgeorganizer.FridgeFragment;
 import de.ruf2.rube.fridgeorganizer.R;
+import de.ruf2.rube.fridgeorganizer.Utilities;
 import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
@@ -55,6 +56,7 @@ public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, 
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+                Utilities.hideKeyboard(mContext);
             }
         });
     }

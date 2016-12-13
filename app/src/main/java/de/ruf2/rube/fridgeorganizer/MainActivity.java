@@ -22,7 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import io.realm.Realm;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, SearchResultFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     protected final String TAG = getClass().getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -242,8 +242,9 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         transaction.replace(R.id.fragment_container, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-//        Toast t = Toast.makeText(this, "This button view new fridge fragment", Toast.LENGTH_SHORT);
-//        t.show();
     }
+
+
+
 
 }

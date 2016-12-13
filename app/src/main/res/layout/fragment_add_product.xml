@@ -10,7 +10,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Fridge"/>
+            android:text="@string/select_fridge"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="New Fridge"
+                android:text="@string/new_fridge"
                 android:layout_gravity="center"
                 android:onClick="clickNewFridge"/>
         </LinearLayout>
@@ -60,6 +60,17 @@
             android:id="@+id/edit_text_product_name"
             android:layout_width="@dimen/edit_text_add_product_width"
             android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="@dimen/text_view_add_product_label_width"
+            android:layout_height="wrap_content"
+            android:text="@string/product_amount"/>
+
+        <EditText
+            android:id="@+id/edit_text_product_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +83,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Buy Date"/>
+                    android:text="@string/buy_date"/>
                 <TextView
                     android:id="@+id/text_view_buy_date"
                     android:layout_width="match_parent"
@@ -88,7 +99,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Expire Date"/>
+                    android:text="@string/expiry_date"/>
                 <TextView
                     android:id="@+id/text_view_expire_date"
                     android:layout_width="match_parent"
@@ -98,21 +109,14 @@
             </LinearLayout>
 
         </LinearLayout>
-        <TextView
-            android:layout_width="@dimen/text_view_add_product_label_width"
-            android:layout_height="wrap_content"
-            android:text="Amount"/>
 
-        <EditText
-            android:id="@+id/edit_text_product_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_add_product"
-            android:text="Add Product"
+            android:text="@string/add_product"
             android:onClick="clickAddProduct"/>
 
 
