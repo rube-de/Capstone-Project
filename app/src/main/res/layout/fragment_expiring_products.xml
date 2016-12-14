@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="de.ruf2.rube.fridgeorganizer.ExpiringProductsFragment">
 
     <LinearLayout
@@ -43,8 +44,7 @@
         android:id="@+id/recycler_view_product"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
     </android.support.v7.widget.RecyclerView>
 

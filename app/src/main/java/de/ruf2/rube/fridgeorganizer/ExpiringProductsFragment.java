@@ -85,7 +85,6 @@ public class ExpiringProductsFragment extends Fragment {
         ButterKnife.bind(this, fragmentView);
         //get Realm
         mRealm = Realm.getDefaultInstance();
-
         //set up recycler view
         setUpRecyclerView();
         return fragmentView;

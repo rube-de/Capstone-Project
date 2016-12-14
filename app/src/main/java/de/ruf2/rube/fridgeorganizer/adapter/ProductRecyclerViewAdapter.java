@@ -46,7 +46,11 @@ public class ProductRecyclerViewAdapter extends RealmRecyclerViewAdapter<Product
         final Product product= getData().get(position);
         holder.data = product;
         if (product != null) {
-            holder.productFridge.setText(product.getFridge().getName());
+            if (product.getFridge() != null) {
+                holder.productFridge.setText(product.getFridge().getName());
+            }else{
+                Timber.d(" no fridge found for product:" + product.getName());
+            }
             //toggle fridge name column
             if (mHideFridgeName) {
                 holder.productFridge.setVisibility(View.INVISIBLE);
