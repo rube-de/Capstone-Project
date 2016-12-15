@@ -6,6 +6,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import timber.log.Timber;
 
 
 /**
@@ -158,6 +161,28 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    @OnClick(R.id.button_search_product)
+    public void onClickSearchProduct(View view) {
+        Timber.d("onClickSearchProduct");
+        String productName= mEditTextProductName.getText().toString();
+        String expiryFrom = mEditTextExpiryFrom.getText().toString();
+        String expiryTo = mEditTextExpiryTo.getText().toString();
+        String buyFrom = mEditTextBuyFrom.getText().toString();
+        String buyTo = mEditTextBuyTo.getText().toString();
+        if(productName.isEmpty()) {
+            mEditTextProductName.setError(getString(R.string.field_required));
+        }else {
+            mEditTextProductName.setError(null);
+            SearchResultFragment newFragment = SearchResultFragment.newInstance(productName,
+                    expiryFrom,expiryTo,buyFrom,buyTo);
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            Utilities.hideKeyboard(getActivity());
+        }
+    }
+
     private void setDateTimeField() {
 
         mEditTextBuyFrom.setOnClickListener(this);
@@ -176,10 +201,10 @@ public class SearchDetailFragment extends Fragment implements View.OnClickListen
 
 
         //init dates
-        mEditTextBuyTo.setText(Utilities.getTodayDateString());
-        mEditTextBuyFrom.setText(Utilities.getTodayDateString());
-        mEditTextExpiryFrom.setText(Utilities.getTodayDateString());
+        mEditTextExpiryFrom.setText(Utilities.getZeroDateString());
         mEditTextExpiryTo.setText(Utilities.getTodayDateString());
+        mEditTextBuyFrom.setText(Utilities.getZeroDateString());
+        mEditTextBuyTo.setText(Utilities.getTodayDateString());
     }
 
 }

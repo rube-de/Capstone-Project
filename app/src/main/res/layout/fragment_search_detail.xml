@@ -106,7 +106,7 @@
         android:id="@+id/button_search_product"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="clickSearch"
+        android:onClick="clickSearchProduct"
         android:text="@string/search"
         android:layout_marginTop="@dimen/margin_fields"/>
 </LinearLayout>

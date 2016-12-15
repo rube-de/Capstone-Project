@@ -76,11 +76,12 @@ public class MainActivityFragment extends Fragment {
     @OnClick(R.id.image_button_search)
     public void onClickSearchProduct(View view) {
         Timber.d("onClickSearchProduct");
-        if(mSearchText.getText().toString().isEmpty()) {
+        String productName= mSearchText.getText().toString();
+        if(productName.isEmpty()) {
             mSearchText.setError(getString(R.string.field_required));
         }else {
             mSearchText.setError(null);
-            SearchResultFragment newFragment = SearchResultFragment.newInstance(mSearchText.getText().toString(), null);
+            SearchResultFragment newFragment = SearchResultFragment.newInstance(productName);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);

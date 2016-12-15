@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.ParseException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
@@ -18,6 +20,7 @@ import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
 import de.ruf2.rube.fridgeorganizer.data.entities.Product;
 import io.realm.Realm;
 import io.realm.RealmQuery;
+import timber.log.Timber;
 
 
 /**
@@ -31,12 +34,18 @@ import io.realm.RealmQuery;
 public class SearchResultFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String PRODUCT_NAME = "productName";
+    private static final String EXPIRY_FROM = "expiryFrom";
+    private static final String EXPIRY_TO = "expiryTo";
+    private static final String BUY_FROM = "buyFrom";
+    private static final String BUY_TO = "buyTo";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String mParamName;
+    private String mParamExpiryFrom;
+    private String mParamExpiryTo;
+    private String mParamBuyFrom;
+    private String mParamBuyTo;
 
     private Activity mContext;
     private Realm mRealm;
@@ -53,16 +62,36 @@ public class SearchResultFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param productName Parameter 1.
      * @return A new instance of fragment SearchResultFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchResultFragment newInstance(String param1, String param2) {
+    public static SearchResultFragment newInstance(String productName){
         SearchResultFragment fragment = new SearchResultFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(PRODUCT_NAME, productName);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param productName Parameter 1.
+     * @param expiryFrom  Parameter 2.
+     * @return A new instance of fragment SearchResultFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static SearchResultFragment newInstance(String productName, String expiryFrom,
+                                                   String expiryTo, String buyFrom, String buyTo) {
+        SearchResultFragment fragment = new SearchResultFragment();
+        Bundle args = new Bundle();
+        args.putString(PRODUCT_NAME, productName);
+        args.putString(EXPIRY_FROM, expiryFrom);
+        args.putString(EXPIRY_TO, expiryTo);
+        args.putString(BUY_FROM, buyFrom);
+        args.putString(BUY_TO, buyTo);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,8 +100,11 @@ public class SearchResultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParamName = getArguments().getString(PRODUCT_NAME);
+            mParamExpiryFrom = getArguments().getString(EXPIRY_FROM);
+            mParamExpiryTo = getArguments().getString(EXPIRY_TO);
+            mParamBuyFrom = getArguments().getString(BUY_FROM);
+            mParamBuyTo = getArguments().getString(BUY_TO);
         }
     }
 
@@ -136,7 +168,20 @@ public class SearchResultFragment extends Fragment {
 
     private void setUpRecyclerView() {
         RealmQuery<Product> query = mRealm.where(Product.class);
-        query.contains("name", mParam1);
+        query.contains("name", mParamName);
+        try {
+            if (!mParamExpiryFrom.isEmpty() && !mParamExpiryTo.isEmpty()) {
+                query.between("expiryDate", Utilities.parseDate(mParamExpiryFrom),
+                        Utilities.parseDate(mParamExpiryTo));
+            }
+            if (!mParamBuyFrom.isEmpty() && !mParamBuyTo.isEmpty()) {
+                query.between("buyDate", Utilities.parseDate(mParamBuyFrom),
+                        Utilities.parseDate(mParamBuyTo));
+            }
+        } catch (ParseException e) {
+            Timber.d("could not parse date");
+            e.printStackTrace();
+        }
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), query.findAll(), false));
         mProductRecyclerView.setHasFixedSize(true);

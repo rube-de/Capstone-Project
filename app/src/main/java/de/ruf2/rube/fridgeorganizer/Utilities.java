@@ -37,6 +37,11 @@ public class Utilities {
         return getDateString(today);
     }
 
+    public static String getZeroDateString(){
+        Date zero = new Date(0);
+        return getDateString(zero);
+    }
+
     public static Date parseDate(String dateString) throws ParseException {
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
         return df.parse(dateString);

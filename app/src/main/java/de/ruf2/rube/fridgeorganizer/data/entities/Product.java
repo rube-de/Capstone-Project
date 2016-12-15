@@ -22,7 +22,7 @@ public class Product extends RealmObject {
     private String name;
     private Fridge fridge;
     private Integer amount;
-    private Date expireDate;
+    private Date expiryDate;
     private Date buyDate;
 
 
@@ -50,12 +50,12 @@ public class Product extends RealmObject {
         this.amount = amount;
     }
 
-    public Date getExpireDate() {
-        return expireDate;
+    public Date getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setExpireDate(Date expireDate) {
-        this.expireDate = expireDate;
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public Date getBuyDate() {

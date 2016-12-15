@@ -59,7 +59,7 @@ public class ProductRecyclerViewAdapter extends RealmRecyclerViewAdapter<Product
                 params.height = 0;
                 holder.productFridge.setLayoutParams(params);
             }
-            holder.productExpiry.setText(Utilities.getDateString(product.getExpireDate()));
+            holder.productExpiry.setText(Utilities.getDateString(product.getExpiryDate()));
             holder.productAmount.setText(product.getAmount().toString());
             holder.productName.setText(product.getName());
         }

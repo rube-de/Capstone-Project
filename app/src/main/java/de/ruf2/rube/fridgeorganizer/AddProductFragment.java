@@ -201,7 +201,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
                 product.setName(productName);
                 product.setAmount(amount);
                 product.setBuyDate(buyDate);
-                product.setExpireDate(expireDate);
+                product.setExpiryDate(expireDate);
                 product.setFridge(fridge);
 
                 // Get reference to writable database
