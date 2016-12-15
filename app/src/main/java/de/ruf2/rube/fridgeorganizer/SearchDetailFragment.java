@@ -1,5 +1,7 @@
 package de.ruf2.rube.fridgeorganizer;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -17,7 +23,7 @@ import android.view.ViewGroup;
  * Use the {@link SearchDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchDetailFragment extends Fragment {
+public class SearchDetailFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,6 +34,25 @@ public class SearchDetailFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    @Bind(R.id.edit_text_search_product_name)
+    EditText mEditTextProductName;
+    @Bind(R.id.edit_text_search_buy_from)
+    EditText mEditTextBuyFrom;
+    @Bind(R.id.edit_text_search_buy_to)
+    EditText mEditTextBuyTo;
+    @Bind(R.id.edit_text_search_expiry_from)
+    EditText mEditTextExpiryFrom;
+    @Bind(R.id.edit_text_search_expiry_to)
+    EditText mEditTextExpiryTo;
+
+    private Activity mContext;
+
+    private DatePickerDialog mBuyFromDatePickerDialog;
+    private DatePickerDialog mBuyToDatePickerDialog;
+    private DatePickerDialog mExpiryFromDatePickerDialog;
+    private DatePickerDialog mExpiryToDatePickerDialog;
+
 
     public SearchDetailFragment() {
         // Required empty public constructor
@@ -65,6 +90,13 @@ public class SearchDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_search_detail, container, false);
+        ButterKnife.bind(this, fragmentView);
+
+        setDateTimeField();
+//init dates
+        mEditTextBuyTo.setText(Utilities.getTodayDateString());
+        mEditTextBuyFrom.setText(Utilities.getTodayDateString());
+
         return fragmentView;
     }
 
@@ -92,6 +124,12 @@ public class SearchDetailFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -106,4 +144,42 @@ public class SearchDetailFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mEditTextBuyFrom) {
+            mBuyFromDatePickerDialog.show();
+        } else if (view == mEditTextBuyTo) {
+            mBuyToDatePickerDialog.show();
+        } else if (view == mEditTextExpiryTo) {
+            mExpiryToDatePickerDialog.show();
+        } else if (view == mEditTextExpiryFrom) {
+            mExpiryFromDatePickerDialog.show();
+        }
+    }
+
+    private void setDateTimeField() {
+
+        mEditTextBuyFrom.setOnClickListener(this);
+        mEditTextBuyTo.setOnClickListener(this);
+        mEditTextExpiryFrom.setOnClickListener(this);
+        mEditTextExpiryTo.setOnClickListener(this);
+
+        mBuyFromDatePickerDialog = Utilities.initDatePicker(
+                mBuyFromDatePickerDialog, mEditTextBuyFrom, getActivity());
+        mBuyToDatePickerDialog = Utilities.initDatePicker(
+                mBuyToDatePickerDialog, mEditTextBuyTo, getActivity());
+        mExpiryFromDatePickerDialog = Utilities.initDatePicker(
+                mBuyToDatePickerDialog, mEditTextExpiryFrom, getActivity());
+        mExpiryToDatePickerDialog = Utilities.initDatePicker(
+                mBuyToDatePickerDialog, mEditTextExpiryTo, getActivity());
+
+
+        //init dates
+        mEditTextBuyTo.setText(Utilities.getTodayDateString());
+        mEditTextBuyFrom.setText(Utilities.getTodayDateString());
+        mEditTextExpiryFrom.setText(Utilities.getTodayDateString());
+        mEditTextExpiryTo.setText(Utilities.getTodayDateString());
+    }
+
 }

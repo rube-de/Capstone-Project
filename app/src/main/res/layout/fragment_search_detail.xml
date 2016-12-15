@@ -44,10 +44,12 @@
             app:hintEnabled="true"
             app:hintAnimationEnabled="true">
             <EditText
-                android:id="@+id/text_view_search_expire_from"
+                android:id="@+id/edit_text_search_expiry_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/from"/>
+                android:hint="@string/from"
+                android:inputType="date"
+                android:imeOptions="actionNext"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
@@ -56,10 +58,12 @@
             app:hintEnabled="true"
             app:hintAnimationEnabled="true">
             <EditText
-                android:id="@+id/text_view_search_expire_to"
+                android:id="@+id/edit_text_search_expiry_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/to"/>
+                android:hint="@string/to"
+                android:inputType="date"
+                android:imeOptions="actionNext"/>
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
     <TextView
@@ -79,7 +83,7 @@
             app:hintAnimationEnabled="true"
             app:hintEnabled="true">
             <EditText
-                android:id="@+id/text_view_search_buy_from"
+                android:id="@+id/edit_text_search_buy_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/from"/>
@@ -91,10 +95,18 @@
             app:hintEnabled="true"
             app:hintAnimationEnabled="true">
             <EditText
-                android:id="@+id/text_view_search_buy_to"
+                android:id="@+id/edit_text_search_buy_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/to"/>
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_search_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="clickSearch"
+        android:text="@string/search"
+        android:layout_marginTop="@dimen/margin_fields"/>
 </LinearLayout>
