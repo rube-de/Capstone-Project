@@ -25,4 +25,9 @@ public class Utilities {
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         return df.format(date);
     }
+
+    public static String getTodayDateString(){
+        Date today = new Date(System.currentTimeMillis());
+        return getDateString(today);
+    }
 }

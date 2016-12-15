@@ -21,4 +21,15 @@
     <string name="new_fridge">New Fridge</string>
     <string name="select_fridge">Select Fridge</string>
     <string name="fridge_name">Fridge Name</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_from">Select From</string>
+    <string name="select_to">Select To</string>
+    <string name="search">Search</string>
+    <string name="expiring_between">Expiring Between</string>
+    <string name="buying_date_between">Buying Date Between</string>
+    <string name="expiring_date_between">Expiring Date Between</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="field_required">This field is required.</string>
+    <string name="error_product_amount">Product amount has to be at least 1.</string>
 </resources>

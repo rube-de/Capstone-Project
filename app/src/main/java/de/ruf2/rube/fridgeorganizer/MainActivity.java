@@ -24,7 +24,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import io.realm.Realm;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, SearchResultFragment.OnFragmentInteractionListener, ExpiringProductsFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, SearchResultFragment.OnFragmentInteractionListener, ExpiringProductsFragment.OnFragmentInteractionListener, SearchDetailFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     protected final String TAG = getClass().getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -196,9 +196,14 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         int id = item.getItemId();
 
         if (id == R.id.nav_search_product) {
-            // Handle the camera action
+            Timber.d("navi search product");
+            SearchDetailFragment newFragment = new SearchDetailFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         } else if (id == R.id.nav_expiring) {
-            Timber.d("onClickSearchProduct");
+            Timber.d("navi expiring products");
             ExpiringProductsFragment newFragment = new ExpiringProductsFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, newFragment);

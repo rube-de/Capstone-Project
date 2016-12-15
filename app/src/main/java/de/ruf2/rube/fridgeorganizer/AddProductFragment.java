@@ -19,7 +19,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
+
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,10 +47,10 @@ import timber.log.Timber;
  * create an instance of this fragment.
  */
 public class AddProductFragment extends Fragment implements OnClickListener {
-    @Bind(R.id.text_view_buy_date)
-    TextView mTextViewBuyDate;
-    @Bind(R.id.text_view_expire_date)
-    TextView mTextViewExpireDate;
+    @Bind(R.id.edit_text_buy_date)
+    EditText mEditTextBuyDate;
+    @Bind(R.id.edit_text_expiry_date)
+    EditText mEditTextExpiryDate;
     @Bind(R.id.edit_text_product_name)
     EditText mEditTextProductName;
     @Bind(R.id.edit_text_product_amount)
@@ -64,7 +65,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     private Activity mContext;
 
     private DatePickerDialog mBuyDatePickerDialog;
-    private DatePickerDialog mExpireDatePickerDialog;
+    private DatePickerDialog mExpiryDatePickerDialog;
 
 
     private SimpleDateFormat mDateFormatter;
@@ -130,8 +131,11 @@ public class AddProductFragment extends Fragment implements OnClickListener {
         RealmResults<Fridge> fridges = mRealm.where(Fridge.class).findAll();
         ArrayAdapter<Fridge> fridgeAdapter = new ArrayAdapter<>(getActivity(), R.layout.sipmle_spinner_dropdown_item, fridges);
         fridgeAdapter.setDropDownViewResource(R.layout.sipmle_spinner_dropdown_item);
-
         mSpinnerFridge.setAdapter(fridgeAdapter);
+
+        //init dates
+        mEditTextBuyDate.setText(Utilities.getTodayDateString());
+        mEditTextExpiryDate.setText(Utilities.getTodayDateString());
 
         return view;
     }
@@ -170,10 +174,10 @@ public class AddProductFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view == mTextViewBuyDate) {
+        if (view == mEditTextBuyDate) {
             mBuyDatePickerDialog.show();
-        } else if (view == mTextViewExpireDate) {
-            mExpireDatePickerDialog.show();
+        } else if (view == mEditTextExpiryDate) {
+            mExpiryDatePickerDialog.show();
         }
     }
 
@@ -181,33 +185,40 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     public void onClickAddProduct(View view) {
         Timber.d("adding product");
         Utilities.hideKeyboard(mContext);
-
         try {
             //get product values
             String productName = mEditTextProductName.getText().toString();
-            Date buyDate = mDateFormatter.parse(mTextViewBuyDate.getText().toString());
-            Date expireDate = mDateFormatter.parse(mTextViewExpireDate.getText().toString());
-            int amount = Integer.parseInt(mEditTextProductAmount.getText().toString());
+            Date buyDate = mDateFormatter.parse(mEditTextBuyDate.getText().toString());
+            Date expireDate = mDateFormatter.parse(mEditTextExpiryDate.getText().toString());
+            Integer amount = NumberUtils.toInt(mEditTextProductAmount.getText().toString(), 0);
             Fridge fridge = (Fridge) mSpinnerFridge.getSelectedItem();
 
+            if (productName.isEmpty() ||  amount == 0) {
+                if (productName.isEmpty()) {
+                    mEditTextProductName.setError(getString(R.string.field_required));
+                }
+                if (amount == 0) {
+                    mEditTextProductAmount.setError(getString(R.string.error_product_amount));
+                }
+            } else {
+                //Set fields
+                Product product = new Product();
+                product.setName(productName);
+                product.setAmount(amount);
+                product.setBuyDate(buyDate);
+                product.setExpireDate(expireDate);
+                product.setFridge(fridge);
 
-            //Set fields
-            Product product = new Product();
-            product.setName(productName);
-            product.setAmount(amount);
-            product.setBuyDate(buyDate);
-            product.setExpireDate(expireDate);
-            product.setFridge(fridge);
+                // Get reference to writable database
+                mRealm.beginTransaction();
+                //Create realm object
+                mRealm.copyToRealm(product);
+                //insert fridge into db
+                mRealm.commitTransaction();
 
-            // Get reference to writable database
-            mRealm.beginTransaction();
-            //Create realm object
-            mRealm.copyToRealm(product);
-            //insert fridge into db
-            mRealm.commitTransaction();
-
-            Snackbar.make(view, "new product created: " + productName, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                Snackbar.make(view, "new product created: " + productName, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -240,8 +251,8 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     }
 
     private void setDateTimeField() {
-        mTextViewExpireDate.setOnClickListener(this);
-        mTextViewBuyDate.setOnClickListener(this);
+        mEditTextExpiryDate.setOnClickListener(this);
+        mEditTextBuyDate.setOnClickListener(this);
 
         Calendar newCalendar = Calendar.getInstance();
         mBuyDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
@@ -249,17 +260,17 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                mTextViewBuyDate.setText(mDateFormatter.format(newDate.getTime()));
+                mEditTextBuyDate.setText(mDateFormatter.format(newDate.getTime()));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-        mExpireDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
+        mExpiryDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                mTextViewExpireDate.setText(mDateFormatter.format(newDate.getTime()));
+                mEditTextExpiryDate.setText(mDateFormatter.format(newDate.getTime()));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
