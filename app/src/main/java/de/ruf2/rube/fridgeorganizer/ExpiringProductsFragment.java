@@ -137,7 +137,7 @@ public class ExpiringProductsFragment extends Fragment {
 
     private void setUpRecyclerView() {
         RealmQuery<Product> query = mRealm.where(Product.class);
-        query.lessThanOrEqualTo("expireDate", new Date(System.currentTimeMillis()));
+        query.lessThanOrEqualTo("expiryDate", new Date(System.currentTimeMillis()));
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), query.findAll(), false));
         mProductRecyclerView.setHasFixedSize(true);
