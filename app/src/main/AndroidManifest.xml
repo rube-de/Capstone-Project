@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.ruf2.rube.fridgeorganizer">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".FridgeApplication"
         android:allowBackup="true"
@@ -25,11 +26,6 @@
             android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
-
-        <activity
-            android:name=".NavigationDrawerActivity"
-            android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddProductActivity"
             android:label="@string/title_activity_add_product"
@@ -38,11 +34,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.ruf2.rube.fridgeorganizer.MainActivity" />
-        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        </activity>
+        <service
+            android:name=".services.ProductService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

@@ -32,4 +32,6 @@
     <string name="to">To</string>
     <string name="field_required">This field is required.</string>
     <string name="error_product_amount">Product amount has to be at least 1.</string>
+    <string name="button_scan">Scan</string>
+    <string name="hint_insert_ean">Insert EAN. Digits only</string>
 </resources>

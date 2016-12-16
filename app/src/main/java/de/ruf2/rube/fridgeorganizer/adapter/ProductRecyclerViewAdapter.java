@@ -28,10 +28,10 @@ public class ProductRecyclerViewAdapter extends RealmRecyclerViewAdapter<Product
     private final PublishSubject<Product> onClickSubject = PublishSubject.create();
     private boolean mHideFridgeName;
 
-    public ProductRecyclerViewAdapter(Context context, RealmResults<Product> data, boolean hideFrigeName){
+    public ProductRecyclerViewAdapter(Context context, RealmResults<Product> data, boolean hideFridgeName){
         super(context, data,true);
         this.mContext = context;
-        this.mHideFridgeName = hideFrigeName;
+        this.mHideFridgeName = hideFridgeName;
     }
 
     @Override
