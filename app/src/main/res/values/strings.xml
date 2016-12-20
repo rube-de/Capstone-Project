@@ -34,4 +34,8 @@
     <string name="error_product_amount">Product amount has to be at least 1.</string>
     <string name="button_scan">Scan</string>
     <string name="hint_insert_ean">Insert EAN. Digits only</string>
+    <string name="title_add_fridge">Add Fridge</string>
+    <string name="title_scan_product">Scan Product</string>
+    <string name="title_expiring_products">Expiring Products</string>
+    <string name="title_search_product">Search Product</string>
 </resources>

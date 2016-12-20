@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+                mTitle = getString(R.string.app_name);
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
         });
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
-            mTitle = "Search Product";
+            mTitle = getString(R.string.title_search_product);
         } else if (id == R.id.nav_expiring) {
             Timber.d("navi expiring products");
             ExpiringProductsFragment newFragment = new ExpiringProductsFragment();
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
-            mTitle = "Expiring Products";
+            mTitle = getString(R.string.title_expiring_products);
 
         } else if (id == R.id.nav_scan) {
             Timber.d("navi scan product");
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
-            mTitle = "Scan Product";
+            mTitle = getString(R.string.title_scan_product);
 
         } else if (id == R.id.nav_add_product) {
             Intent addIntent = new Intent();
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
-            mTitle = "Add Fridge";
+            mTitle = getString(R.string.title_add_fridge);
         } else if (id == R.id.nav_settings) {
         } else if (id == R.id.nav_share) {
 
