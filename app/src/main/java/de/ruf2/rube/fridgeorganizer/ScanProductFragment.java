@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -130,6 +129,8 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //set actionbar title
+        setFragmentTitle("Scan Product");
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_scan_product, container, false);
         ButterKnife.bind(this, fragmentView);
@@ -194,9 +195,9 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void setFragmentTitle(String title) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(title);
         }
     }
 
@@ -315,7 +316,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String title);
     }
 
     @Override

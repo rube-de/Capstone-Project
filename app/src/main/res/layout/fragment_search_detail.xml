@@ -6,11 +6,6 @@
     android:orientation="vertical"
     tools:context="de.ruf2.rube.fridgeorganizer.SearchDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search" />
 
   <android.support.design.widget.TextInputLayout
       android:layout_width="match_parent"

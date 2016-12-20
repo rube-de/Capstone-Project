@@ -174,8 +174,12 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         return super.onOptionsItemSelected(item);
     }
 
-    public void onFragmentInteraction(Uri uri) {
-        //you can leave it empty
+    public void onFragmentInteraction(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
+    public void onFragmentInteraction(Uri uri){
+
     }
 
 
@@ -192,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+            mTitle = "Search Product";
         } else if (id == R.id.nav_expiring) {
             Timber.d("navi expiring products");
             ExpiringProductsFragment newFragment = new ExpiringProductsFragment();
@@ -199,14 +204,16 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+            mTitle = "Expiring Products";
 
         } else if (id == R.id.nav_scan) {
-            Timber.d("navi scan products");
+            Timber.d("navi scan product");
             ScanProductFragment newFragment = new ScanProductFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+            mTitle = "Scan Product";
 
         } else if (id == R.id.nav_add_product) {
             Intent addIntent = new Intent();
@@ -218,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.replace(R.id.fragment_container, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+            mTitle = "Add Fridge";
         } else if (id == R.id.nav_settings) {
         } else if (id == R.id.nav_share) {
 
