@@ -70,7 +70,6 @@ public class FridgeFragment extends Fragment {
         setUpRecyclerView();
         return fragmentView;
     }
-    // TODO: Rename method, update argument and hook method into UI event
     public void setFragmentTitle(String title) {
         if (mListener != null) {
             mListener.onFragmentInteraction(title);
