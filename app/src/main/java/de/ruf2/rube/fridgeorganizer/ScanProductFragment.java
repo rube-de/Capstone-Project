@@ -130,7 +130,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //set actionbar title
-        setFragmentTitle("Scan Product");
+        setFragmentTitle(getString(R.string.title_scan_product));
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_scan_product, container, false);
         ButterKnife.bind(this, fragmentView);
@@ -194,7 +194,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         return fragmentView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void setFragmentTitle(String title) {
         if (mListener != null) {
             mListener.onFragmentInteraction(title);
@@ -315,7 +314,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(String title);
     }
 

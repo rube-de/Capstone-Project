@@ -1,6 +1,7 @@
 package de.ruf2.rube.fridgeorganizer;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +25,7 @@ import timber.log.Timber;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
+    private ScanProductFragment.OnFragmentInteractionListener mListener;
     private Realm mRealm;
     private RecyclerView mFridgeRecyclerView;
     @Bind(R.id.edit_text_search)
@@ -40,6 +42,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setFragmentTitle(getString(R.string.app_name));
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         //get db
@@ -51,10 +54,33 @@ public class MainActivityFragment extends Fragment {
         return view;
     }
 
+    public void setFragmentTitle(String title) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(title);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mRealm.close();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ScanProductFragment.OnFragmentInteractionListener) {
+            mListener = (ScanProductFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     private void setUpRecyclerView() {
@@ -79,6 +105,10 @@ public class MainActivityFragment extends Fragment {
             transaction.commit();
             Utilities.hideKeyboard(getActivity());
         }
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(String title);
     }
 
 

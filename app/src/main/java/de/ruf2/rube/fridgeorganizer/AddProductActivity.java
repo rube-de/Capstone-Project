@@ -58,5 +58,9 @@ public class AddProductActivity extends AppCompatActivity implements AddProductF
         //you can leave it empty
     }
 
+    public void onFragmentInteraction(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
 
 }
