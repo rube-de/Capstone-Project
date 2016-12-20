@@ -2,7 +2,6 @@ package de.ruf2.rube.fridgeorganizer;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,9 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
@@ -36,8 +33,6 @@ public class FridgeFragment extends Fragment {
     private Integer mFridgeId;
     private Fridge mFridge;
 
-    @Bind(R.id.text_view_fragment_fridge_name)
-    TextView mFridgeNameTextView;
 
     public FridgeFragment() {
     }
@@ -69,16 +64,16 @@ public class FridgeFragment extends Fragment {
         mFridge = mRealm.where(Fridge.class)
                 .equalTo("_id", mFridgeId).findFirst();
 
+        setFragmentTitle(mFridge.getName());
         //Set up fridge list
-        mFridgeNameTextView.setText(mFridge.getName());
         mProductRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view_product);
         setUpRecyclerView();
         return fragmentView;
     }
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void setFragmentTitle(String title) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(title);
         }
     }
 
@@ -107,8 +102,7 @@ public class FridgeFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String title);
     }
 
     private void setUpRecyclerView() {
