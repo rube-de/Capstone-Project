@@ -40,7 +40,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         //get db
         mRealm = Realm.getDefaultInstance();
@@ -53,7 +53,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        super.onStop();
+        super.onDestroyView();
         mRealm.close();
     }
 
@@ -64,22 +64,13 @@ public class MainActivityFragment extends Fragment {
         mFridgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }
 
-
-    @OnClick(R.id.button_new_fridge_main_fragment)
-    public void clickNewFridge(View view) {
-        AddFridgeFragment newFragment = new AddFridgeFragment();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
     @OnClick(R.id.image_button_search)
     public void onClickSearchProduct(View view) {
         Timber.d("onClickSearchProduct");
-        String productName= mSearchText.getText().toString();
-        if(productName.isEmpty()) {
+        String productName = mSearchText.getText().toString();
+        if (productName.isEmpty()) {
             mSearchText.setError(getString(R.string.field_required));
-        }else {
+        } else {
             mSearchText.setError(null);
             SearchResultFragment newFragment = SearchResultFragment.newInstance(productName);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -89,7 +80,6 @@ public class MainActivityFragment extends Fragment {
             Utilities.hideKeyboard(getActivity());
         }
     }
-
 
 
 }

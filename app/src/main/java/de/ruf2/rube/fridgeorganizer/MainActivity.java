@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -17,12 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-
 import io.realm.Realm;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener, AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener, SearchResultFragment.OnFragmentInteractionListener, ExpiringProductsFragment.OnFragmentInteractionListener, SearchDetailFragment.OnFragmentInteractionListener, ScanProductFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
-    protected final String TAG = getClass().getSimpleName();
+public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener,
+        AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener,
+        SearchResultFragment.OnFragmentInteractionListener, ExpiringProductsFragment.OnFragmentInteractionListener,
+        SearchDetailFragment.OnFragmentInteractionListener, ScanProductFragment.OnFragmentInteractionListener,
+        SettingsFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
@@ -46,16 +47,17 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
 
         mRealm = Realm.getDefaultInstance();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addIntent = new Intent();
-                addIntent.setClass(getApplicationContext(), AddProductActivity.class);
-                startActivity(addIntent);
-            }
-        });
+        //TODO: disabled for now
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        assert fab != null;
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent addIntent = new Intent();
+//                addIntent.setClass(getApplicationContext(), AddProductActivity.class);
+//                startActivity(addIntent);
+//            }
+//        });
 
         mTitle = mDrawerTitle = getTitle().toString();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -228,6 +230,12 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.commit();
             mTitle = getString(R.string.title_add_fridge);
         } else if (id == R.id.nav_settings) {
+            SettingsFragment newFragment = new SettingsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            mTitle = getString(R.string.title_settings);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
