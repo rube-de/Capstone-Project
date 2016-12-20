@@ -171,6 +171,12 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            SettingsFragment newFragment = new SettingsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            mTitle = getString(R.string.title_settings);
             return true;
         }
 
