@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
 
     public final static String FRIDGE_KEY = "fridgekey";
 
+    public final static String NOTIFICATION_EXTRA = "notification";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,19 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         });
 
         navigationView.setNavigationItemSelectedListener(this);
-        initFrameContainer(savedInstanceState);
+
+        Intent notifyIntent = getIntent();
+        Bundle extras = notifyIntent.getExtras();
+        if (extras != null && extras.getBoolean(NOTIFICATION_EXTRA)){
+            ExpiringProductsFragment newFragment = new ExpiringProductsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            mTitle = getString(R.string.title_expiring_products);
+        }else {
+            initFrameContainer(savedInstanceState);
+        }
 
 
     }

@@ -1,12 +1,16 @@
 package de.ruf2.rube.fridgeorganizer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
+
+import de.ruf2.rube.fridgeorganizer.receivers.NotificationEventReceiver;
+import timber.log.Timber;
 
 
-
-public class SettingsFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener{
 
 
     private OnFragmentInteractionListener mListener;
@@ -24,6 +28,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setFragmentTitle("Settings");
         addPreferencesFromResource(R.xml.preferences);
+
+    }
+
+    @Override
+    public void onResume(){
+        Timber.d("onResume");
+        super.onResume();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause(){
+        Timber.d("onPause");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sharedPref.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
 
     }
 
@@ -57,6 +78,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(key.equals(getString(R.string.key_enable_notifications))){
+            Boolean enableNotifications = preferences.getBoolean(getString(R.string.key_enable_notifications), false);
+            if (enableNotifications) {
+                NotificationEventReceiver.setupAlarm(getActivity());
+            }else{
+                NotificationEventReceiver.cancelAlarm(getActivity());
+        }
+        }
     }
 
     /**
