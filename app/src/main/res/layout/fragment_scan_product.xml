@@ -1,162 +1,169 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="de.ruf2.rube.fridgeorganizer.ScanProductFragment">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:context="de.ruf2.rube.fridgeorganizer.ScanProductFragment">-->
 
-    <LinearLayout
-        android:id="@+id/eancontainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="de.ruf2.rube.fridgeorganizer.ScanProductFragment">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_text_ean"
+            <LinearLayout
+                android:id="@+id/eancontainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_insert_ean"
-                android:inputType="number"
-                android:maxLength="13"
-                android:maxLines="1"
-                android:minEms="8"
-                android:paddingRight="20dp"
-                android:saveEnabled="true" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_text_ean"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_insert_ean"
+                        android:inputType="number"
+                        android:maxLength="13"
+                        android:maxLines="1"
+                        android:minEms="8"
+                        android:paddingRight="20dp"
+                        android:saveEnabled="true" />
+                </android.support.design.widget.TextInputLayout>
 
 
-        <Button
-            android:id="@+id/button_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_scan" />
+                <Button
+                    android:id="@+id/button_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_scan" />
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_fields"
-        app:errorEnabled="true"
-        app:hintAnimationEnabled="true"
-        app:hintEnabled="true">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/edit_text_product_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/product_name"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:maxLines="1" />
-    </android.support.design.widget.TextInputLayout>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_fridge" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spinner_fridge"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
-
-            <Button
-                android:id="@+id/button_new_fridge_product_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:onClick="clickNewFridge"
-                android:text="@string/new_fridge" />
-        </LinearLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_fields"
-            app:errorEnabled="true"
-            app:hintAnimationEnabled="true"
-            app:hintEnabled="true">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_text_product_amount"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/product_amount"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_fields"
-            android:orientation="horizontal">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginTop="@dimen/margin_fields"
+                app:errorEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_text_buy_date"
+                    android:id="@+id/edit_text_product_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/buy_date"
+                    android:hint="@string/product_name"
                     android:imeOptions="actionNext"
-                    android:inputType="date" />
-
+                    android:inputType="text"
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:text="@string/select_fridge" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner_fridge"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+
+                <Button
+                    android:id="@+id/button_new_fridge_product_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:onClick="clickNewFridge"
+                    android:text="@string/new_fridge" />
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_fields"
+                app:errorEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_text_expiry_date"
+                    android:id="@+id/edit_text_product_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/expiry_date"
-                    android:imeOptions="actionDone"
-                    android:inputType="date" />
-
+                    android:ems="10"
+                    android:hint="@string/product_amount"
+                    android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_fields"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:hintAnimationEnabled="true"
+                    app:hintEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_text_buy_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/buy_date"
+                        android:imeOptions="actionNext"
+                        android:inputType="date" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:hintAnimationEnabled="true"
+                    app:hintEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_text_expiry_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/expiry_date"
+                        android:imeOptions="actionDone"
+                        android:inputType="date" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_add_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_fields"
+                android:onClick="clickAddProduct"
+                android:text="@string/add_product" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_add_product"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_fields"
-            android:onClick="clickAddProduct"
-            android:text="@string/add_product" />
-
-    </LinearLayout>
-
-</FrameLayout>
+    <!--</FrameLayout>-->
+</ScrollView>

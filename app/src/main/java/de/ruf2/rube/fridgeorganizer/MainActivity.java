@@ -14,7 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import io.realm.Realm;
 import timber.log.Timber;
@@ -123,7 +127,16 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
         }
 
 
+        // Load an ad into the AdMob banner view.
+        final AdView adView = (AdView) findViewById(R.id.adView);
+        final AdRequest adRequest = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView.loadAd(adRequest);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
     }
+
 
     private void initFrameContainer(Bundle savedInstanceState) {
         // Check that the activity is using the layout version with

@@ -38,11 +38,19 @@
     <string name="title_search_product">Search Product</string>
     <string name="title_settings">Settings</string>
 
-<!--shared preferenc keys-->
+    <!--shared preferenc keys-->
     <string name="key_enable_notifications">enable_notifications</string>
     <string name="key_custom_date">custom_date</string>
     <string name="key_expiry_date">expiry_date</string>
+
+    <!--notification strings-->
     <string name="notify_text_there_are">"There are "</string>
     <string name="notify_text_expiring_products">" expiring product(s)"</string>
     <string name="notify_title">You have expiring products</string>
+
+    <!-- -
+     This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
+     For more information, see https://support.google.com/admob/answer/3052638
+    <!- -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
