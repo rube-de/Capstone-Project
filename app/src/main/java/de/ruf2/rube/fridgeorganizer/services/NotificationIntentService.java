@@ -10,6 +10,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.preference.PreferenceManager;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.util.Calendar;
 import java.util.Date;
 
 import de.ruf2.rube.fridgeorganizer.MainActivity;
@@ -73,11 +76,22 @@ public class NotificationIntentService extends IntentService {
         //TODO: implement getting custom date
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean isCustomDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
-        Date date = new Date(System.currentTimeMillis());
+        Integer expiryInt = NumberUtils.toInt(preferences.getString(getString(R.string.key_expiry_date), "0"));
+        Date date = new Date();
         if (isCustomDate) {
-        }else{
-        }
+            // convert date to calendar
+            Date currentDate  = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(currentDate);
 
+            // manipulate date
+            if (expiryInt == 30){
+                c.add(Calendar.MONTH, 1);
+            }else {
+                c.add(Calendar.DATE, expiryInt);
+            }
+            date = c.getTime();
+        }
         Realm realm =Realm.getDefaultInstance();
         RealmQuery<Product> query = realm.where(Product.class);
         query.lessThanOrEqualTo("expiryDate", date);

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
 import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
@@ -57,7 +56,6 @@ public class FridgeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_fridge, container, false);
-        ButterKnife.bind(this,fragmentView);
         //get Realm and fridge
         mRealm = Realm.getDefaultInstance();
         mFridgeId = getArguments().getInt(FRIDGE_ID);

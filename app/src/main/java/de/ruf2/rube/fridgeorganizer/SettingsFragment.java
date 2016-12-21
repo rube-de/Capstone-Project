@@ -9,8 +9,10 @@ import android.support.v7.preference.PreferenceManager;
 import de.ruf2.rube.fridgeorganizer.receivers.NotificationEventReceiver;
 import timber.log.Timber;
 
+import static de.ruf2.rube.fridgeorganizer.R.xml.preferences;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener{
+
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     private OnFragmentInteractionListener mListener;
@@ -22,17 +24,21 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setFragmentTitle("Settings");
-        addPreferencesFromResource(R.xml.preferences);
+        addPreferencesFromResource(preferences);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Boolean customDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
+        getPreferenceScreen().findPreference(getString(R.string.key_expiry_date)).setEnabled(customDate);
 
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         Timber.d("onResume");
         super.onResume();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -40,7 +46,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         Timber.d("onPause");
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sharedPref.unregisterOnSharedPreferenceChangeListener(this);
@@ -83,13 +89,16 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if(key.equals(getString(R.string.key_enable_notifications))){
+        if (key.equals(getString(R.string.key_enable_notifications))) {
             Boolean enableNotifications = preferences.getBoolean(getString(R.string.key_enable_notifications), false);
             if (enableNotifications) {
                 NotificationEventReceiver.setupAlarm(getActivity());
-            }else{
+            } else {
                 NotificationEventReceiver.cancelAlarm(getActivity());
-        }
+            }
+        } else if (key.equals(getString(R.string.key_custom_date))) {
+            Boolean customDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
+            getPreferenceScreen().findPreference(getString(R.string.key_expiry_date)).setEnabled(customDate);
         }
     }
 

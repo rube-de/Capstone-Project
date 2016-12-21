@@ -7,6 +7,13 @@
         android:key="@string/key_custom_date"
         android:summary="If disabled it will use the date of today"
         android:defaultValue="false"/>
-
+    <android.support.v7.preference.ListPreference
+        android:title="Custom expiry date"
+        android:key="@string/key_expiry_date"
+        android:entries="@array/expiry_date_names_array"
+        android:entryValues="@array/expiry_date_values_array"
+        android:defaultValue="0"
+        android:summary="Choose a custom expiry date"
+        />
 
 </android.support.v7.preference.PreferenceScreen>

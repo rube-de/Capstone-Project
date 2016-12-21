@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--expiry date names array-->
+    <string-array name="expiry_date_names_array">
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>In 2 Days</item>
+        <item>In 3 Days</item>
+        <item>In 4 Days</item>
+        <item>In 5 Days</item>
+        <item>In 6 Days</item>
+        <item>In 7 Days</item>
+        <item>In 1 Week</item>
+        <item>In 2 weeks</item>
+        <item>In 1 Month</item>
+    </string-array>
+
+    <!--expiry date values array-->
+    <string-array name="expiry_date_values_array">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>14</item>
+        <item>30</item>
+    </string-array>
+</resources>
