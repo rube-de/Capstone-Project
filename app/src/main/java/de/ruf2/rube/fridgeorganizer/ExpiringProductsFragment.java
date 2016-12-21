@@ -1,13 +1,17 @@
 package de.ruf2.rube.fridgeorganizer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Date;
 
@@ -81,7 +85,7 @@ public class ExpiringProductsFragment extends Fragment {
                              Bundle savedInstanceState) {
         setFragmentTitle(getString(R.string.title_expiring_products));
         // Inflate the layout for this fragment
-        View fragmentView =  inflater.inflate(R.layout.fragment_expiring_products, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_expiring_products, container, false);
         ButterKnife.bind(this, fragmentView);
         //get Realm
         mRealm = Realm.getDefaultInstance();
@@ -134,8 +138,15 @@ public class ExpiringProductsFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
+        Date expiryDate = new Date();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Boolean isCustomDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
+        Integer expiryInt = NumberUtils.toInt(preferences.getString(getString(R.string.key_expiry_date), "0"));
+        if (isCustomDate) {
+            expiryDate = Utilities.changeDate(expiryInt);
+        }
         RealmQuery<Product> query = mRealm.where(Product.class);
-        query.lessThanOrEqualTo("expiryDate", new Date(System.currentTimeMillis()));
+        query.lessThanOrEqualTo("expiryDate", expiryDate);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), query.findAll(), false));
         mProductRecyclerView.setHasFixedSize(true);

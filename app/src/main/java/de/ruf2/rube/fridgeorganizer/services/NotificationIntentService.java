@@ -12,11 +12,11 @@ import android.support.v7.preference.PreferenceManager;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import de.ruf2.rube.fridgeorganizer.MainActivity;
 import de.ruf2.rube.fridgeorganizer.R;
+import de.ruf2.rube.fridgeorganizer.Utilities;
 import de.ruf2.rube.fridgeorganizer.data.entities.Product;
 import de.ruf2.rube.fridgeorganizer.receivers.NotificationEventReceiver;
 import io.realm.Realm;
@@ -72,37 +72,26 @@ public class NotificationIntentService extends IntentService {
     }
 
     private void processStartNotification() {
-        // Do something. For example, fetch fresh data from backend to create a rich notification?
-        //TODO: implement getting custom date
+        //get for shared preferences date for expiry time of the products
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean isCustomDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
         Integer expiryInt = NumberUtils.toInt(preferences.getString(getString(R.string.key_expiry_date), "0"));
         Date date = new Date();
         if (isCustomDate) {
-            // convert date to calendar
-            Date currentDate  = new Date();
-            Calendar c = Calendar.getInstance();
-            c.setTime(currentDate);
-
-            // manipulate date
-            if (expiryInt == 30){
-                c.add(Calendar.MONTH, 1);
-            }else {
-                c.add(Calendar.DATE, expiryInt);
-            }
-            date = c.getTime();
+            date = Utilities.changeDate(expiryInt);
         }
-        Realm realm =Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
         RealmQuery<Product> query = realm.where(Product.class);
         query.lessThanOrEqualTo("expiryDate", date);
         RealmResults<Product> results = query.findAll();
 
-        if(results.size() > 0 ) {
+        if (results.size() > 0) {
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-            builder.setContentTitle("Scheduled Notification")
+            String text = getString(R.string.notify_text_there_are) + results.size() + getString(R.string.notify_text_expiring_products);
+            builder.setContentTitle(getString(R.string.notify_title))
                     .setAutoCancel(true)
                     .setColor(getResources().getColor(R.color.colorAccent))
-                    .setContentText("This notification has been triggered by Notification Service")
+                    .setContentText(text)
                     .setSmallIcon(R.drawable.ic_menu_send);
 
             Intent intent = new Intent(this, MainActivity.class);

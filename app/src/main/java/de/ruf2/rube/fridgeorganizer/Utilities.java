@@ -146,6 +146,20 @@ public class Utilities {
                  productName = productJson.getString(NAME);
             }
         return productName;
+    }
 
+    public static Date changeDate(Integer days){
+        // convert date to calendar
+        Date currentDate  = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDate);
+
+        // manipulate date
+        if (days == 30){
+            c.add(Calendar.MONTH, 1);
+        }else {
+            c.add(Calendar.DATE, days);
+        }
+        return c.getTime();
     }
 }

@@ -42,4 +42,7 @@
     <string name="key_enable_notifications">enable_notifications</string>
     <string name="key_custom_date">custom_date</string>
     <string name="key_expiry_date">expiry_date</string>
+    <string name="notify_text_there_are">"There are "</string>
+    <string name="notify_text_expiring_products">" expiring product(s)"</string>
+    <string name="notify_title">You have expiring products</string>
 </resources>
