@@ -170,7 +170,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
             public void afterTextChanged(Editable s) {
                 String ean = s.toString();
 
-                //get product name from ean service
+                //get product name from ean service.
                 cache = getStringObservable();
                 cache
                         .observeOn(AndroidSchedulers.mainThread())
