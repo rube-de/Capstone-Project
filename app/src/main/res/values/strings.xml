@@ -32,11 +32,14 @@
     <string name="error_product_amount">Product amount has to be at least 1.</string>
     <string name="button_scan">Scan</string>
     <string name="hint_insert_ean">Insert EAN. Digits only</string>
+
+    <!--drawer titles-->
     <string name="title_add_fridge">Add Fridge</string>
-    <string name="title_scan_product">Scan Product</string>
+    <string name="title_scan_product">Scan/Add Product</string>
     <string name="title_expiring_products">Expiring Products</string>
     <string name="title_search_product">Search Product</string>
     <string name="title_settings">Settings</string>
+    <string name="title_search_results">Search Results</string>
 
     <!--shared preferenc keys-->
     <string name="key_enable_notifications">enable_notifications</string>
@@ -51,7 +54,7 @@
     <!-- -
      This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
      For more information, see https://support.google.com/admob/answer/3052638
+
     <!- -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="title_search_results">Search Results</string>
 </resources>

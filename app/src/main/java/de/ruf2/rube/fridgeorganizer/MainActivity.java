@@ -24,8 +24,7 @@ import com.google.android.gms.ads.AdView;
 import io.realm.Realm;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements AddProductFragment.OnFragmentInteractionListener,
-        AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener,
+public class MainActivity extends AppCompatActivity implements AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener,
         SearchResultFragment.OnFragmentInteractionListener, ExpiringProductsFragment.OnFragmentInteractionListener,
         SearchDetailFragment.OnFragmentInteractionListener, ScanProductFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
@@ -253,10 +252,6 @@ public class MainActivity extends AppCompatActivity implements AddProductFragmen
             transaction.commit();
             mTitle = getString(R.string.title_scan_product);
 
-        } else if (id == R.id.nav_add_product) {
-            Intent addIntent = new Intent();
-            addIntent.setClass(getApplicationContext(), AddProductActivity.class);
-            startActivity(addIntent);
         } else if (id == R.id.nav_add_fridge) {
             AddFridgeFragment newFragment = new AddFridgeFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

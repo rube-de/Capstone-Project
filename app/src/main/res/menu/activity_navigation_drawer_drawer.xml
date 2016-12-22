@@ -14,10 +14,7 @@
             android:id="@+id/nav_scan"
             android:title="Scan Product" />
         <!--android:icon="@drawable/ic_menu_slideshow"-->
-        <item
-            android:id="@+id/nav_add_product"
-            android:title="@string/add_product" />
-        <!--android:icon="@drawable/ic_menu_slideshow"-->
+
         <item
             android:id="@+id/nav_add_fridge"
             android:title="@string/button_add_fridge" />

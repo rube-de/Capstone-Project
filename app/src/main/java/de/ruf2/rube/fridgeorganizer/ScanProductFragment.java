@@ -291,7 +291,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     public void onClickNewFridge(View view) {
         AddFridgeFragment newFragment = new AddFridgeFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container_product, newFragment);
+        transaction.replace(R.id.fragment_container, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
