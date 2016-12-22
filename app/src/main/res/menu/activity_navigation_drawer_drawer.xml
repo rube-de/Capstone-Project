@@ -4,29 +4,30 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_search_product"
-            android:icon="@drawable/ic_menu_camera"
             android:title="Search Product" />
+        <!--android:icon="@drawable/ic_menu_camera"-->
         <item
             android:id="@+id/nav_expiring"
-            android:icon="@drawable/ic_menu_gallery"
             android:title="Expiring Products" />
+        <!--android:icon="@drawable/ic_menu_gallery"-->
         <item
             android:id="@+id/nav_scan"
-            android:icon="@drawable/ic_menu_slideshow"
             android:title="Scan Product" />
+        <!--android:icon="@drawable/ic_menu_slideshow"-->
         <item
             android:id="@+id/nav_add_product"
-            android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/add_product" />
+        <!--android:icon="@drawable/ic_menu_slideshow"-->
         <item
             android:id="@+id/nav_add_fridge"
-            android:icon="@drawable/ic_menu_manage"
             android:title="@string/button_add_fridge" />
+        <!--android:icon="@drawable/ic_menu_manage"-->
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_manage"
             android:title="Settings" />
+            <!--android:icon="@drawable/ic_menu_manage"-->
     </group>
+
 
     <item android:title="Communicate">
         <menu>
