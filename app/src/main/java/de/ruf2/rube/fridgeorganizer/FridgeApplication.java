@@ -12,6 +12,7 @@ import io.realm.RealmConfiguration;
 public class FridgeApplication extends Application {
     private static FridgeApplication application;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,4 +33,5 @@ public class FridgeApplication extends Application {
     public static Context getContext(){
         return application;
     }
+
 }

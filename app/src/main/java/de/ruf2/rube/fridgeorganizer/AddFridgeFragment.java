@@ -12,6 +12,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,6 +40,7 @@ public class AddFridgeFragment extends Fragment {
     private Activity mContext;
 
     private Realm mRealm;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public AddFridgeFragment() {
         // Required empty public constructor
@@ -72,6 +75,9 @@ public class AddFridgeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mRealm = Realm.getDefaultInstance();
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     @Override
@@ -89,6 +95,11 @@ public class AddFridgeFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(title);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override

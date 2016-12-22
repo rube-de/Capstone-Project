@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import de.ruf2.rube.fridgeorganizer.receivers.NotificationEventReceiver;
 import timber.log.Timber;
 
@@ -16,7 +18,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
 
     private OnFragmentInteractionListener mListener;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -25,6 +27,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     @Override

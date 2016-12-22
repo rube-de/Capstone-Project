@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.trello.rxlifecycle.components.support.RxFragment;
@@ -87,6 +88,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
 
     private DatePickerDialog mBuyDatePickerDialog;
     private DatePickerDialog mExpiryDatePickerDialog;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public ScanProductFragment() {
         // Required empty public constructor
@@ -116,6 +118,8 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         }
         mContext = getActivity();
         mRealm = Realm.getDefaultInstance();
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     @Override
@@ -198,6 +202,11 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         if (mListener != null) {
             mListener.onFragmentInteraction(title);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override

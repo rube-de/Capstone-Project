@@ -2,7 +2,6 @@ package de.ruf2.rube.fridgeorganizer;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.ParseException;
 
 import butterknife.Bind;
@@ -18,6 +21,7 @@ import butterknife.ButterKnife;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
 import de.ruf2.rube.fridgeorganizer.data.entities.Product;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import timber.log.Timber;
@@ -53,6 +57,7 @@ public class SearchResultFragment extends Fragment {
     RecyclerView mProductRecyclerView;
 
     private OnFragmentInteractionListener mListener;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public SearchResultFragment() {
         // Required empty public constructor
@@ -106,11 +111,17 @@ public class SearchResultFragment extends Fragment {
             mParamBuyFrom = getArguments().getString(BUY_FROM);
             mParamBuyTo = getArguments().getString(BUY_TO);
         }
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //set actionbar title
+        setFragmentTitle(getString(R.string.title_search_results));
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_search_result, container, false);
         ButterKnife.bind(this, fragmentView);
@@ -121,11 +132,15 @@ public class SearchResultFragment extends Fragment {
         return fragmentView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void setFragmentTitle(String title) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(title);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override
@@ -162,19 +177,18 @@ public class SearchResultFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String title);
     }
 
     private void setUpRecyclerView() {
         RealmQuery<Product> query = mRealm.where(Product.class);
-        query.contains("name", mParamName);
+        query.contains("name", mParamName, Case.INSENSITIVE);
         try {
-            if (!mParamExpiryFrom.isEmpty() && !mParamExpiryTo.isEmpty()) {
+            if (!StringUtils.isBlank(mParamExpiryFrom) && !StringUtils.isBlank(mParamExpiryTo)) {
                 query.between("expiryDate", Utilities.parseDate(mParamExpiryFrom),
                         Utilities.parseDate(mParamExpiryTo));
             }
-            if (!mParamBuyFrom.isEmpty() && !mParamBuyTo.isEmpty()) {
+            if (!StringUtils.isBlank(mParamBuyFrom) && !StringUtils.isBlank(mParamBuyTo)) {
                 query.between("buyDate", Utilities.parseDate(mParamBuyFrom),
                         Utilities.parseDate(mParamBuyTo));
             }

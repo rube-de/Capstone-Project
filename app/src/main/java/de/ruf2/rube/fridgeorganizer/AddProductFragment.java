@@ -15,10 +15,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -55,8 +56,6 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     EditText mEditTextProductAmount;
     @Bind(R.id.spinner_fridge)
     Spinner mSpinnerFridge;
-    @Bind(R.id.button_new_fridge_product_fragment)
-    Button mButtonNewFridge;
 
     private Realm mRealm;
 
@@ -76,6 +75,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public AddProductFragment() {
         // Required empty public constructor
@@ -109,6 +109,9 @@ public class AddProductFragment extends Fragment implements OnClickListener {
         }
         mContext = getActivity();
         mRealm = Realm.getDefaultInstance();
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     @Override
@@ -140,6 +143,11 @@ public class AddProductFragment extends Fragment implements OnClickListener {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -188,7 +196,7 @@ public class AddProductFragment extends Fragment implements OnClickListener {
             Integer amount = NumberUtils.toInt(mEditTextProductAmount.getText().toString(), 0);
             Fridge fridge = (Fridge) mSpinnerFridge.getSelectedItem();
 
-            if (productName.isEmpty() ||  amount == 0) {
+            if (productName.isEmpty() || amount == 0) {
                 if (productName.isEmpty()) {
                     mEditTextProductName.setError(getString(R.string.field_required));
                 }

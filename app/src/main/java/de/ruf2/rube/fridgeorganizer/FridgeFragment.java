@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
 import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
@@ -31,6 +33,7 @@ public class FridgeFragment extends Fragment {
     private static final String FRIDGE_ID = "fridgeId";
     private Integer mFridgeId;
     private Fridge mFridge;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     public FridgeFragment() {
@@ -49,6 +52,9 @@ public class FridgeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     @Override
@@ -72,6 +78,11 @@ public class FridgeFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(title);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override
