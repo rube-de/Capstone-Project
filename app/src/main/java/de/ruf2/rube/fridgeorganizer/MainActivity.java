@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements AddFridgeFragment
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -204,6 +204,15 @@ public class MainActivity extends AppCompatActivity implements AddFridgeFragment
             transaction.addToBackStack(null);
             transaction.commit();
             mTitle = getString(R.string.title_settings);
+            return true;
+        }else if(id == R.id.action_scan){
+            Timber.d("navi scan product");
+            ScanProductFragment newFragment = ScanProductFragment.newInstance(true);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            mTitle = getString(R.string.title_scan_product);
             return true;
         }
 

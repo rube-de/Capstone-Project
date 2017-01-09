@@ -58,6 +58,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     private static final String ARG_EAN = "ean";
 
     private String mEan;
+    private Boolean mScan = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -102,10 +103,10 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
      * @return A new instance of fragment ScanProductFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ScanProductFragment newInstance(String ean) {
+    public static ScanProductFragment newInstance(boolean ean) {
         ScanProductFragment fragment = new ScanProductFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_EAN, ean);
+        args.putBoolean(ARG_EAN, ean);
         fragment.setArguments(args);
         return fragment;
     }
@@ -114,12 +115,17 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mEan = getArguments().getString(ARG_EAN);
+            mScan = getArguments().getBoolean(ARG_EAN);
         }
         mContext = getActivity();
         mRealm = Realm.getDefaultInstance();
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+
+        //start scan if fragment was started via scan
+        if(mScan){
+            startScan();
+        }
     }
 
     @Override
@@ -195,6 +201,8 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         if (savedInstanceState != null) {
             mEditTextEan.setText(savedInstanceState.getString(EAN_CONTENT));
         }
+
+
         return fragmentView;
     }
 
@@ -374,6 +382,11 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    private void startScan(){
+        IntentIntegrator scanIntegrator = new IntentIntegrator(ScanProductFragment.this);
+        scanIntegrator.initiateScan();
     }
 
 
