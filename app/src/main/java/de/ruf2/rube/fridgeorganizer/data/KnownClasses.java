@@ -1,7 +1,8 @@
 package de.ruf2.rube.fridgeorganizer.data;
 
 /**
- * Created by Bernhard Ruf on 11.10.2016.
+ * @author Carlos Eduardo
+ * @since 03/09/2016
  */
 public interface KnownClasses {
 

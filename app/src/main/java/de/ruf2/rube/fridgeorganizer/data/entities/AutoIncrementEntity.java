@@ -7,7 +7,8 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 /**
- * Created by Bernhard Ruf on 11.10.2016.
+ * @author Carlos Eduardo
+ * @since 03/09/2016
  */
 public class AutoIncrementEntity extends RealmObject {
 

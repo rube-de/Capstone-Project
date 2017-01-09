@@ -10,7 +10,16 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmObject;
 
 /**
- * Created by Bernhard Ruf on 11.10.2016.
+ * Simple implementation of Auto Increment feature for Realm
+ *
+ * RealmAutoIncrement is a singleton which maintain the last id saved from each model.
+ * <p/>
+ * To get next id from anyone model, simple call the method getNextIdFromModel.
+ *
+ * @see #getNextIdFromModel(Class)
+ *
+ * @author Carlos Eduardo
+ * @since 03/09/2016
  */
 public class RealmAutoIncrement {
     private static RealmAutoIncrement autoIncrementMap;
