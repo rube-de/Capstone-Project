@@ -12,7 +12,7 @@
         <!--android:icon="@drawable/ic_menu_gallery"-->
         <item
             android:id="@+id/nav_scan"
-            android:title="Scan Product" />
+            android:title="@string/title_scan_product" />
         <!--android:icon="@drawable/ic_menu_slideshow"-->
 
         <item
