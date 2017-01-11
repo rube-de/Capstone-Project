@@ -4,12 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_search_product"
-            android:title="Search Product" />
+            android:title="@string/title_search_product" />
         <!--android:icon="@drawable/ic_menu_camera"-->
         <item
             android:id="@+id/nav_expiring"
-            android:title="Expiring Products" />
-        <!--android:icon="@drawable/ic_menu_gallery"-->
+            android:title="@string/title_expiring_products"/>
         <item
             android:id="@+id/nav_scan"
             android:title="@string/title_scan_product" />
@@ -21,7 +20,7 @@
         <!--android:icon="@drawable/ic_menu_manage"-->
         <item
             android:id="@+id/nav_settings"
-            android:title="Settings" />
+            android:title="@string/title_settings" />
             <!--android:icon="@drawable/ic_menu_manage"-->
     </group>
 
