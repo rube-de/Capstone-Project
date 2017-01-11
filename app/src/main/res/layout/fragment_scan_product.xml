@@ -38,7 +38,6 @@
                         android:maxLength="13"
                         android:maxLines="1"
                         android:minEms="8"
-                        android:paddingRight="20dp"
                         android:saveEnabled="true" />
                 </android.support.design.widget.TextInputLayout>
 

@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_text_search"
-                android:hint="Search Product"
+                android:hint="@string/search_product"
                 android:inputType="text"
                 android:saveEnabled="true"
                 android:imeOptions="actionSearch"/>
@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/margin_fields"></android.support.v7.widget.RecyclerView>
+        android:layout_marginTop="@dimen/margin_fields"/>
 
 
 

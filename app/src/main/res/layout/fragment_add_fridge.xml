@@ -8,19 +8,32 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         
-        <EditText
-            android:layout_width="@dimen/edit_text_add_product_width"
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edit_text_new_fridge_name"
-            android:text="New Fridge"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" >
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_text_new_fridge_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_fridge"
+                android:inputType="text"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:minEms="8"
+                android:saveEnabled="true" />
+        </android.support.design.widget.TextInputLayout>
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/button_add_fridge"
             android:id="@+id/button_add_fridge"
             android:onClick="clickCreateFridge"/>
+
+
     </LinearLayout>
     
 
