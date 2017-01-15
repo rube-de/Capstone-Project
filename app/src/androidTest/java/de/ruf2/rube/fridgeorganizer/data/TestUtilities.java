@@ -7,10 +7,18 @@ import android.test.AndroidTestCase;
 import java.util.Map;
 import java.util.Set;
 
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract.ProductEntry;
+
 /**
  * Created by Bernhard Ruf on 28.08.2016.
  */
 public class TestUtilities extends AndroidTestCase {
+
+    static final String TEST_LOCATION = "99705";
+    static final String TEST_PRODUCT_NAME = "Milch";
+    static final long TEST_DATE = 1419033600L;  // December 20th, 2014
+
+
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
         validateCurrentRecord(error, valueCursor, expectedValues);
@@ -28,5 +36,22 @@ public class TestUtilities extends AndroidTestCase {
                     "' did not match the expected value '" +
                     expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
         }
+    }
+
+    static ContentValues createProductValues(long fridgeRowId) {
+        ContentValues productValues = new ContentValues();
+        productValues.put(ProductEntry.COLUMN_FRIDGE_KEY, fridgeRowId);
+        productValues.put(ProductEntry.COLUMN_BUY_DATE, TEST_DATE);
+        productValues.put(ProductEntry.COLUMN_EXPIRE_DATE, TEST_DATE);
+        productValues.put(ProductEntry.COLUMN_AMOUNT, 2);
+        productValues.put(ProductEntry.COLUMN_NAME, TEST_PRODUCT_NAME);
+
+        return productValues;
+    }
+
+    static ContentValues createFridgeValues(){
+        ContentValues fridgeValues = new ContentValues();
+        fridgeValues.put(FridgeContract.FridgeEntry.COLUMN_NAME, "TestFridge");
+        return fridgeValues;
     }
 }

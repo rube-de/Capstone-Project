@@ -2,9 +2,14 @@ package de.ruf2.rube.fridgeorganizer;
 
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -21,21 +26,25 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
-import de.ruf2.rube.fridgeorganizer.adapter.FridgeRecyclerViewAdapter;
-import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
+import de.ruf2.rube.fridgeorganizer.adapter.FridgeAdapter;
+import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 import io.realm.Realm;
 import timber.log.Timber;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private ScanProductFragment.OnFragmentInteractionListener mListener;
     private Realm mRealm;
     private RecyclerView mFridgeRecyclerView;
+    private FridgeAdapter mFridgeAdapter;
     @Bind(R.id.edit_text_search)
     EditText mSearchText;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    static final int FRIDGE_LOADER = 0;
 
     public MainActivityFragment() {
     }
@@ -75,6 +84,11 @@ public class MainActivityFragment extends Fragment {
         setUpRecyclerView();
         return view;
     }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        getLoaderManager().initLoader(FRIDGE_LOADER, null , this);
+        super.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public void onResume(){
@@ -111,8 +125,9 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
+        mFridgeAdapter = new FridgeAdapter(getActivity());
         mFridgeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mFridgeRecyclerView.setAdapter(new FridgeRecyclerViewAdapter(getActivity(), mRealm.where(Fridge.class).findAll()));
+        mFridgeRecyclerView.setAdapter(mFridgeAdapter);
         mFridgeRecyclerView.setHasFixedSize(true);
         mFridgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }
@@ -132,6 +147,31 @@ public class MainActivityFragment extends Fragment {
             transaction.commit();
             Utilities.hideKeyboard(getActivity());
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String sortOrder = FridgeContract.FridgeEntry.COLUMN_NAME + " ASC";
+
+        Uri fridgeUri = FridgeContract.FridgeEntry.CONTENT_URI;
+        return new CursorLoader(getActivity(),
+                fridgeUri,
+                DataUtilities.FRIDGE_COLUMNS,
+                null,
+                null,
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mFridgeAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mFridgeAdapter.swapCursor(null);
+
     }
 
     public interface OnFragmentInteractionListener {

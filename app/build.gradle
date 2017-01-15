@@ -61,6 +61,9 @@ dependencies {
     compile 'com.trello:rxlifecycle-components:1.0'
     compile 'org.apache.commons:commons-lang3:3.5'
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'net.simonvt.schematic:schematic-compiler:0.7.0'
+    compile 'net.simonvt.schematic:schematic:0.7.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

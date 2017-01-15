@@ -2,19 +2,25 @@ package de.ruf2.rube.fridgeorganizer;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -35,10 +41,9 @@ import java.util.Date;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
-import de.ruf2.rube.fridgeorganizer.data.entities.Product;
+import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -54,7 +59,7 @@ import timber.log.Timber;
  * Use the {@link ScanProductFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScanProductFragment extends RxFragment implements Observer<String>,View.OnClickListener{
+public class ScanProductFragment extends RxFragment implements Observer<String>,View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>{
     private static final String ARG_EAN = "ean";
 
     private String mEan;
@@ -91,6 +96,9 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     private DatePickerDialog mExpiryDatePickerDialog;
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    static final int FRIDGE_LOADER = 0;
+    private SimpleCursorAdapter mFridgeAdapter;
+
     public ScanProductFragment() {
         // Required empty public constructor
     }
@@ -126,6 +134,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         if(mScan){
             startScan();
         }
+
     }
 
     @Override
@@ -151,10 +160,22 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         setDateTimeField();
 
         //init fridge spinner
-        RealmResults<Fridge> fridges = mRealm.where(Fridge.class).findAll();
-        ArrayAdapter<Fridge> fridgeAdapter = new ArrayAdapter<>(getActivity(), R.layout.sipmle_spinner_dropdown_item, fridges);
-        fridgeAdapter.setDropDownViewResource(R.layout.sipmle_spinner_dropdown_item);
-        mSpinnerFridge.setAdapter(fridgeAdapter);
+//        RealmResults<Fridge> fridges = mRealm.where(Fridge.class).findAll();
+
+        String[] columns = {FridgeContract.FridgeEntry.COLUMN_NAME};
+        int[] toViews = {R.id.checked_text_spinner};
+        mFridgeAdapter = new SimpleCursorAdapter(getActivity(),
+                R.layout.sipmle_spinner_dropdown_item,
+                null,
+                columns,
+                toViews,
+                0
+                );
+        mFridgeAdapter.setDropDownViewResource(R.layout.sipmle_spinner_dropdown_item);
+//        ArrayAdapter<Fridge> fridgeAdapter = new ArrayAdapter<>(getActivity(),
+//                R.layout.sipmle_spinner_dropdown_item, fridges);
+//        fridgeAdapter.setDropDownViewResource(R.layout.sipmle_spinner_dropdown_item);
+        mSpinnerFridge.setAdapter(mFridgeAdapter);
 
         //init dates
         mEditTextBuyDate.setText(Utilities.getTodayDateString());
@@ -206,6 +227,11 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         return fragmentView;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        getLoaderManager().initLoader(FRIDGE_LOADER, null , this);
+        super.onActivityCreated(savedInstanceState);
+    }
     public void setFragmentTitle(String title) {
         if (mListener != null) {
             mListener.onFragmentInteraction(title);
@@ -261,7 +287,8 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
             Date buyDate = Utilities.parseDate(mEditTextBuyDate.getText().toString());
             Date expireDate = Utilities.parseDate(mEditTextExpiryDate.getText().toString());
             Integer amount = NumberUtils.toInt(mEditTextProductAmount.getText().toString(), 0);
-            Fridge fridge = (Fridge) mSpinnerFridge.getSelectedItem();
+            Long fridgeId = ((Cursor) mSpinnerFridge.getSelectedItem()).getLong(
+                    ((Cursor) mSpinnerFridge.getSelectedItem()).getColumnIndex(FridgeContract.FridgeEntry._ID));
 
             if (productName.isEmpty() ||  amount == 0) {
                 if (productName.isEmpty()) {
@@ -271,20 +298,18 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
                     mEditTextProductAmount.setError(getString(R.string.error_product_amount));
                 }
             } else {
-                //Set fields
-                Product product = new Product();
-                product.setName(productName);
-                product.setAmount(amount);
-                product.setBuyDate(buyDate);
-                product.setExpiryDate(expireDate);
-                product.setFridge(fridge);
 
-                // Get reference to writable database
-                mRealm.beginTransaction();
-                //Create realm object
-                mRealm.copyToRealm(product);
-                //insert fridge into db
-                mRealm.commitTransaction();
+                //content values
+                ContentValues productValues = new ContentValues();
+                productValues.put(FridgeContract.ProductEntry.COLUMN_NAME, productName);
+                productValues.put(FridgeContract.ProductEntry.COLUMN_AMOUNT, productName);
+                productValues.put(FridgeContract.ProductEntry.COLUMN_BUY_DATE, buyDate.getTime());
+                productValues.put(FridgeContract.ProductEntry.COLUMN_EXPIRE_DATE, expireDate.getTime());
+                productValues.put(FridgeContract.ProductEntry.COLUMN_FRIDGE_KEY, fridgeId);
+
+                //content provider
+                mContext.getContentResolver().insert(FridgeContract.ProductEntry.CONTENT_URI, productValues);
+
 
                 Snackbar.make(view, "new product created: " + productName, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -317,6 +342,29 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     @Override
     public void onNext(String s) {
         mEditTextProductName.setText(s);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String sortOrder = FridgeContract.FridgeEntry.COLUMN_NAME + " ASC";
+
+        Uri fridgeUri = FridgeContract.FridgeEntry.CONTENT_URI;
+        return new CursorLoader(getActivity(),
+                fridgeUri,
+                DataUtilities.FRIDGE_COLUMNS,
+                null,
+                null,
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mFridgeAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mFridgeAdapter.swapCursor(null);
     }
 
 

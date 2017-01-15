@@ -1,6 +1,7 @@
 package de.ruf2.rube.fridgeorganizer;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -17,7 +18,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 import io.realm.Realm;
 import timber.log.Timber;
 
@@ -67,14 +68,12 @@ public class AddFridgeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
-        mRealm = Realm.getDefaultInstance();
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -129,7 +128,6 @@ public class AddFridgeFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mRealm.close();
     }
 
     /**
@@ -157,17 +155,13 @@ public class AddFridgeFragment extends Fragment {
         //get fridge values
         String fridgeName = mEditTextNewFridge.getText().toString();
 
+        //content values
+        ContentValues fridgeValues = new ContentValues();
+        fridgeValues.put(FridgeContract.FridgeEntry.COLUMN_NAME, fridgeName);
 
-        //Set fields
-        Fridge fridge = new Fridge();
-        fridge.setName(fridgeName);
+        //insert into content provider
+        mContext.getContentResolver().insert(FridgeContract.FridgeEntry.CONTENT_URI, fridgeValues);
 
-        // Get reference to writable database
-        mRealm.beginTransaction();
-        //Create realm object
-        mRealm.copyToRealm(fridge);
-        //insert fridge into db
-        mRealm.commitTransaction();
 
         Snackbar.make(view, "new fridge created: " + fridgeName, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();

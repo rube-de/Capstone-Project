@@ -41,6 +41,7 @@ public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+
         final Fridge fridge = getData().get(position);
         holder.data = fridge;
         holder.fridgeName.setText(fridge.getName());
@@ -51,7 +52,7 @@ public class FridgeRecyclerViewAdapter extends RealmRecyclerViewAdapter<Fridge, 
 
                 Timber.d("on click called: " + fridge.getName());
 
-                FridgeFragment newFragment = FridgeFragment.newInstance(fridge.getId());
+                FridgeFragment newFragment = FridgeFragment.newInstance(Long.valueOf(fridge.getId()));
                 FragmentTransaction transaction = mContext.getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);

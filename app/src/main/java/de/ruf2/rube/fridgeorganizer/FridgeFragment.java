@@ -2,8 +2,13 @@ package de.ruf2.rube.fridgeorganizer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,15 +18,16 @@ import android.view.ViewGroup;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
-import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
+import de.ruf2.rube.fridgeorganizer.adapter.ProductAdapter;
+import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
-import de.ruf2.rube.fridgeorganizer.data.entities.Product;
 import io.realm.Realm;
 
 /**
  * Created by Bernhard Ruf on 06.10.2016.
  */
-public class FridgeFragment extends Fragment {
+public class FridgeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private Activity mContext;
     private Realm mRealm;
 
@@ -31,18 +37,23 @@ public class FridgeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private static final String FRIDGE_ID = "fridgeId";
-    private Integer mFridgeId;
+    private Long mFridgeId;
     private Fridge mFridge;
+    private String mFridgeName;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    static final int PRODUCT_LOADER = 0;
+
+    private ProductAdapter mProductAdapter;
 
 
     public FridgeFragment() {
     }
 
-    public static FridgeFragment newInstance(Integer fridgeId) {
+    public static FridgeFragment newInstance(Long fridgeId) {
         FridgeFragment fragment = new FridgeFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(FRIDGE_ID, fridgeId);
+        arguments.putLong(FRIDGE_ID, fridgeId);
         fragment.setArguments(arguments);
         return fragment;
 
@@ -64,16 +75,27 @@ public class FridgeFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_fridge, container, false);
         //get Realm and fridge
         mRealm = Realm.getDefaultInstance();
-        mFridgeId = getArguments().getInt(FRIDGE_ID);
+        mFridgeId = getArguments().getLong(FRIDGE_ID);
         mFridge = mRealm.where(Fridge.class)
                 .equalTo("_id", mFridgeId).findFirst();
 
-        setFragmentTitle(mFridge.getName());
+
+        Cursor fridgeCursor = mContext.getContentResolver().query(FridgeContract.FridgeEntry.buildFridgeUri(mFridgeId), null, null, null, null);
+        fridgeCursor.moveToFirst();
+        mFridgeName = fridgeCursor.getString(DataUtilities.COL_FRIDGE_NAME);
+        setFragmentTitle(mFridgeName);
         //Set up fridge list
         mProductRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view_product);
         setUpRecyclerView();
         return fragmentView;
     }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        getLoaderManager().initLoader(PRODUCT_LOADER, null , this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
     public void setFragmentTitle(String title) {
         if (mListener != null) {
             mListener.onFragmentInteraction(title);
@@ -109,13 +131,37 @@ public class FridgeFragment extends Fragment {
         mRealm.close();
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String sortOrder = FridgeContract.ProductEntry.TABLE_NAME + "." + FridgeContract.ProductEntry.COLUMN_NAME + " ASC";
+
+        Uri fridgeUri = FridgeContract.ProductEntry.buildProductsOfFridge(mFridgeId);
+        return new CursorLoader(getActivity(),//context
+                fridgeUri,//uri
+                DataUtilities.PRODUCT_COLUMNS, //projection
+                null,//selection
+                null,//selection args
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mProductAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mProductAdapter.swapCursor(null);
+    }
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String title);
     }
 
     private void setUpRecyclerView() {
+        mProductAdapter = new ProductAdapter(getActivity(),true);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), mRealm.where(Product.class).equalTo("fridge._id", mFridgeId).findAll(),true));
+        mProductRecyclerView.setAdapter(mProductAdapter);
         mProductRecyclerView.setHasFixedSize(true);
         mProductRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }
