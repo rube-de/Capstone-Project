@@ -17,5 +17,7 @@
     <dimen name="button_add_width">100dp</dimen>
     <dimen name="margin_fields">4dp</dimen>
 
+    <dimen name="widget_margin">8dp</dimen>
+
 
 </resources>
