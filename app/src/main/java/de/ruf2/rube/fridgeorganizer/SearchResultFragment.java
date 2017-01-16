@@ -18,11 +18,8 @@ import android.view.ViewGroup;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -163,10 +160,10 @@ public class SearchResultFragment extends Fragment implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder = FridgeContract.ProductEntry.TABLE_NAME + "." + FridgeContract.ProductEntry.COLUMN_EXPIRE_DATE + " ASC";
-        Long expiryFrom = 0L;
-        Long expiryTo = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), 1).getTime();;
-        Long buyFrom = 0L;
-        Long buyTo = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), 1).getTime();
+        Long expiryFrom = null;
+        Long expiryTo = null;
+        Long buyFrom = null;
+        Long buyTo = null;
         try {
             if (!StringUtils.isBlank(mParamExpiryFrom) && !StringUtils.isBlank(mParamExpiryTo)) {
                 expiryFrom = Utilities.parseDate(mParamExpiryFrom).getTime();
@@ -180,12 +177,17 @@ public class SearchResultFragment extends Fragment implements LoaderManager.Load
             Timber.d("could not parse date");
             e.printStackTrace();
         }
-        Uri fridgeUri = FridgeContract.ProductEntry.buildProductWithNameAndBuyAndExpiryDate(
-                mParamName,
-                buyFrom,
-                buyTo,
-                expiryFrom,
-                expiryTo);
+        Uri fridgeUri;
+        if (expiryFrom == null || expiryTo == null || buyFrom == null || buyTo== null  ) {
+            fridgeUri = FridgeContract.ProductEntry.buildProductWithName(mParamName);
+        } else {
+            fridgeUri = FridgeContract.ProductEntry.buildProductWithNameAndBuyAndExpiryDate(
+                    mParamName,
+                    buyFrom,
+                    buyTo,
+                    expiryFrom,
+                    expiryTo);
+        }
 
         return new CursorLoader(getActivity(),//context
                 fridgeUri,//uri
@@ -197,12 +199,13 @@ public class SearchResultFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mProductAdapter.swapCursor(data);
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mProductAdapter.swapCursor(null);
     }
 
     /**
@@ -220,7 +223,7 @@ public class SearchResultFragment extends Fragment implements LoaderManager.Load
     }
 
     private void setUpRecyclerView() {
-        mProductAdapter = new ProductAdapter(getActivity(), true);
+        mProductAdapter = new ProductAdapter(getActivity(), false);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mProductRecyclerView.setAdapter(mProductAdapter);
         mProductRecyclerView.setHasFixedSize(true);

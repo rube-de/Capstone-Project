@@ -10,8 +10,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Created by Bernhard Ruf on 14.01.2017.
  */
@@ -135,7 +133,7 @@ public class FridgeProvider extends ContentProvider {
         String[] selectionArgs;
         String selection;
 
-        if(StringUtils.isBlank(buyStartDate) && StringUtils.isBlank(buyEndDate)  && StringUtils.isBlank(expiryStartDate) && StringUtils.isBlank(expiryEndDate)){
+        if(buyStartDate == "0" && buyEndDate == "0"   && expiryStartDate == "0"  && expiryEndDate== "0" ){
             selectionArgs = new String[] {productName};
             selection = sProductWithNameSettingSelection;
 
