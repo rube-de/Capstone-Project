@@ -2,8 +2,13 @@ package de.ruf2.rube.fridgeorganizer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,16 +19,18 @@ import android.view.ViewGroup;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
-import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
-import de.ruf2.rube.fridgeorganizer.data.entities.Product;
+import de.ruf2.rube.fridgeorganizer.adapter.ProductAdapter;
+import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 import io.realm.Realm;
-import io.realm.RealmQuery;
 
 
 /**
@@ -32,7 +39,7 @@ import io.realm.RealmQuery;
  * {@link ExpiringProductsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ExpiringProductsFragment extends Fragment {
+public class ExpiringProductsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
 
     private Realm mRealm;
@@ -42,6 +49,10 @@ public class ExpiringProductsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    static final int PRODUCT_LOADER = 2;
+
+    private ProductAdapter mProductAdapter;
 
     public ExpiringProductsFragment() {
         // Required empty public constructor
@@ -68,6 +79,12 @@ public class ExpiringProductsFragment extends Fragment {
         //set up recycler view
         setUpRecyclerView();
         return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        getLoaderManager().initLoader(PRODUCT_LOADER, null , this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     public void setFragmentTitle(String title) {
@@ -104,6 +121,35 @@ public class ExpiringProductsFragment extends Fragment {
         mRealm.close();
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String sortOrder = FridgeContract.ProductEntry.TABLE_NAME + "." + FridgeContract.ProductEntry.COLUMN_EXPIRE_DATE + " ASC";
+        Date expiryDate = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), 1);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Boolean isCustomDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
+        Integer expiryInt = NumberUtils.toInt(preferences.getString(getString(R.string.key_expiry_date), "0"));
+        if (isCustomDate) {
+            expiryDate = Utilities.changeDate(expiryInt);
+        }
+        Uri fridgeUri = FridgeContract.ProductEntry.buildProductWithExpiryEndDate(expiryDate.getTime());
+        return new CursorLoader(getActivity(),//context
+                fridgeUri,//uri
+                DataUtilities.PRODUCT_COLUMNS, //projection
+                null,//selection
+                null,//selection args
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mProductAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mProductAdapter.swapCursor(null);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -119,17 +165,9 @@ public class ExpiringProductsFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
-        Date expiryDate = new Date();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Boolean isCustomDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
-        Integer expiryInt = NumberUtils.toInt(preferences.getString(getString(R.string.key_expiry_date), "0"));
-        if (isCustomDate) {
-            expiryDate = Utilities.changeDate(expiryInt);
-        }
-        RealmQuery<Product> query = mRealm.where(Product.class);
-        query.lessThanOrEqualTo("expiryDate", expiryDate);
+       mProductAdapter = new ProductAdapter(getActivity(), false);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), query.findAll(), false));
+        mProductRecyclerView.setAdapter(mProductAdapter);
         mProductRecyclerView.setHasFixedSize(true);
         mProductRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }

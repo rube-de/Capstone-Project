@@ -19,6 +19,7 @@ public class FridgeContract {
     public static final String PATH_PRODUCT = "product";
     public static final String PATH_PRODUCT_TYPE = "product_type";
     public static final String PATH_FRIDGE_TYPE = "fridge_type";
+    public static final String PATH_EXPIRY = "expiry";
 
     //query helper constants
     private static final String EXPIRY_START = "expiry_start";
@@ -98,7 +99,9 @@ public class FridgeContract {
         }
 
         public static Uri buildProductWithName(String name){
-            return CONTENT_URI.buildUpon().appendPath(name).build();
+            return CONTENT_URI.buildUpon()
+//                    .appendPath(PATH_PRODUCT)
+                    .appendPath(name).build();
         }
 
         public static Uri buildProductWithStartAndEndDate(long startDate, long endDate){
@@ -109,11 +112,20 @@ public class FridgeContract {
                                                                   long buyEndDate, long expiryStartDate,
                                                                   long expiryEndDate){
             return CONTENT_URI.buildUpon()
+//                    .appendPath(PATH_PRODUCT)
                     .appendPath(name)
                     .appendQueryParameter(BUY_START, Long.toString(normalizeDate(buyStartDate)))
                     .appendQueryParameter(BUY_END, Long.toString(normalizeDate(buyEndDate)))
                     .appendQueryParameter(EXPIRY_START, Long.toString(normalizeDate(expiryStartDate)))
                     .appendQueryParameter(EXPIRY_END, Long.toString(normalizeDate(expiryEndDate)))
+                    .build();
+        }
+
+        public static Uri buildProductWithExpiryEndDate(long expiryEndDate){
+            return CONTENT_URI.buildUpon()
+                    .appendPath(PATH_EXPIRY)
+                    .appendPath(PATH_EXPIRY)
+                    .appendQueryParameter(EXPIRY_END, Long.toString((normalizeDate(expiryEndDate))))
                     .build();
         }
 

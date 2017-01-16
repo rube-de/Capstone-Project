@@ -154,6 +154,24 @@ public class FridgeProvider extends ContentProvider {
         );
     }
 
+    private Cursor getProductWithExpirySetting(Uri uri, String[] projection, String sortOrder){
+        String expiryEndDate = Long.toString(FridgeContract.ProductEntry.getExpiryEndDateFromUri(uri));
+        //startdate = 0
+        String startDate = "0";
+
+        String[] selectionArgs = new String[] {startDate, expiryEndDate};
+        String selection = sProductWithExpirySettingSelection;
+
+        return sProductByFridgeQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
     private  Cursor getFridgeByIdSetting (Uri uri, String[] projection, String sortOrder){
         String fridgeId = FridgeContract.FridgeEntry.getFridgeIdFromUri(uri);
         String[] selectionArgs = new String[] {fridgeId};
@@ -177,7 +195,7 @@ public class FridgeProvider extends ContentProvider {
         matcher.addURI(authority, FridgeContract.PATH_PRODUCT, PRODUCT);
         matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/#", PRODUCT_ID);
         matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/#", PRODUCT_WITH_FRIDGE);
-        matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/#/#", PRODUCT_BETWEEN_EXP_DATES);
+        matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/" + FridgeContract.PATH_EXPIRY + "/*", PRODUCT_BETWEEN_EXP_DATES);
         matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/#/#", PRODUCT_BETWEEN_BUY_DATES);
 //        matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/*", PRODUCT_WITH_NAME);
         matcher.addURI(authority, FridgeContract.PATH_PRODUCT + "/*", PRODUCT_WITH_NAME_AND_BETWEEN_BUY_AND_EXP_DATES);
@@ -254,7 +272,7 @@ public class FridgeProvider extends ContentProvider {
                 break;
             }
             case PRODUCT_BETWEEN_EXP_DATES:{
-                retCursor = null;
+                retCursor = getProductWithExpirySetting(uri, projection,sortOrder);
                 break;
             }
             case FRIDGE_ID:{

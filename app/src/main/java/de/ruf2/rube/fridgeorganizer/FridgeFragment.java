@@ -42,7 +42,7 @@ public class FridgeFragment extends Fragment implements LoaderManager.LoaderCall
     private String mFridgeName;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    static final int PRODUCT_LOADER = 0;
+    static final int PRODUCT_LOADER = 1;
 
     private ProductAdapter mProductAdapter;
 

@@ -6,22 +6,23 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.preference.PreferenceManager;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import de.ruf2.rube.fridgeorganizer.MainActivity;
 import de.ruf2.rube.fridgeorganizer.R;
 import de.ruf2.rube.fridgeorganizer.Utilities;
-import de.ruf2.rube.fridgeorganizer.data.entities.Product;
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 import de.ruf2.rube.fridgeorganizer.receivers.NotificationEventReceiver;
-import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import timber.log.Timber;
 
 /**
@@ -76,18 +77,21 @@ public class NotificationIntentService extends IntentService {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean isCustomDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
         Integer expiryInt = NumberUtils.toInt(preferences.getString(getString(R.string.key_expiry_date), "0"));
-        Date date = new Date();
+        Date expiryDate = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), 1);
         if (isCustomDate) {
-            date = Utilities.changeDate(expiryInt);
+            expiryDate = Utilities.changeDate(expiryInt);
         }
-        Realm realm = Realm.getDefaultInstance();
-        RealmQuery<Product> query = realm.where(Product.class);
-        query.lessThanOrEqualTo("expiryDate", date);
-        RealmResults<Product> results = query.findAll();
 
-        if (results.size() > 0) {
+        Uri fridgeUri = FridgeContract.ProductEntry.buildProductWithExpiryEndDate(expiryDate.getTime());
+        Cursor query = getContentResolver().query(fridgeUri, null, null, null, null);
+//        Realm realm = Realm.getDefaultInstance();
+//        RealmQuery<Product> query = realm.where(Product.class);
+//        query.lessThanOrEqualTo("expiryDate", date);
+//        RealmResults<Product> results = query.findAll();
+
+        if (query.getCount() > 0) {
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-            String text = getString(R.string.notify_text_there_are) + results.size() + getString(R.string.notify_text_expiring_products);
+            String text = getString(R.string.notify_text_there_are) + query.getCount() + getString(R.string.notify_text_expiring_products);
             builder.setContentTitle(getString(R.string.notify_title))
                     .setAutoCancel(true)
                     .setColor(getResources().getColor(R.color.colorAccent))

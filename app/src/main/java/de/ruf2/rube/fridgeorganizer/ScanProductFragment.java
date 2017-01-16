@@ -302,7 +302,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
                 //content values
                 ContentValues productValues = new ContentValues();
                 productValues.put(FridgeContract.ProductEntry.COLUMN_NAME, productName);
-                productValues.put(FridgeContract.ProductEntry.COLUMN_AMOUNT, productName);
+                productValues.put(FridgeContract.ProductEntry.COLUMN_AMOUNT, amount);
                 productValues.put(FridgeContract.ProductEntry.COLUMN_BUY_DATE, buyDate.getTime());
                 productValues.put(FridgeContract.ProductEntry.COLUMN_EXPIRE_DATE, expireDate.getTime());
                 productValues.put(FridgeContract.ProductEntry.COLUMN_FRIDGE_KEY, fridgeId);
