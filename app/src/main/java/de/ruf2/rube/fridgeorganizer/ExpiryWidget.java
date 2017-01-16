@@ -3,6 +3,19 @@ package de.ruf2.rube.fridgeorganizer;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.support.v7.preference.PreferenceManager;
+import android.widget.RemoteViews;
+
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 
 /**
  * Implementation of App Widget functionality.
@@ -13,25 +26,27 @@ public class ExpiryWidget extends AppWidgetProvider {
                                 int appWidgetId) {
 
         //get for shared preferences date for expiry time of the products
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-//        Boolean isCustomDate = preferences.getBoolean(getString(R.string.key_custom_date), false);
-//        Integer expiryInt = NumberUtils.toInt(preferences.getString(getString(R.string.key_expiry_date), "0"));
-//        Date date = new Date();
-//        if (isCustomDate) {
-//            date = Utilities.changeDate(expiryInt);
-//        }
-//        Realm realm = Realm.getDefaultInstance();
-//        RealmQuery<Product> query = realm.where(Product.class);
-//        query.lessThanOrEqualTo("expiryDate", date);
-//        RealmResults<Product> results = query.findAll();
-//
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Boolean isCustomDate = preferences.getBoolean(context.getString(R.string.key_custom_date), false);
+        Integer expiryInt = NumberUtils.toInt(preferences.getString(context.getString(R.string.key_expiry_date), "0"));
+        Date expiryDate = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), 1);
+        if (isCustomDate) {
+            expiryDate = Utilities.changeDate(expiryInt);
+        }
+
+        Uri fridgeUri = FridgeContract.ProductEntry.buildProductWithExpiryEndDate(expiryDate.getTime());
+        Cursor query = context.getContentResolver().query(fridgeUri, null, null, null, null);
+        int expiringProductsNumber = query.getCount();
+
+
 //        CharSequence widgetText = context.getString(R.string.appwidget_text);
-//        // Construct the RemoteViews object
-//        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.expiry_widget);
-//        views.setTextViewText(R.id.appwidget_text, widgetText);
-//
-//        // Instruct the widget manager to update the widget
-//        appWidgetManager.updateAppWidget(appWidgetId, views);
+        CharSequence widgetText = Integer.toString(expiringProductsNumber);
+        // Construct the RemoteViews object
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.expiry_widget);
+        views.setTextViewText(R.id.appwidget_number, widgetText);
+
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
