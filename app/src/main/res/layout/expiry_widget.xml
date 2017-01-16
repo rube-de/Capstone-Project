@@ -14,7 +14,7 @@
         android:contentDescription="@string/appwidget_text"
         android:text="@string/appwidget_text"
         android:textColor="#ffffff"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:textStyle="bold|italic" />
 
     <TextView
@@ -24,10 +24,10 @@
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
         android:background="#09C"
-        android:contentDescription="@string/appwidget_text"
+        android:contentDescription="@string/count_of_expiring_products"
         android:text="@string/appwidget_number"
         android:textColor="#ffffff"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:textStyle="bold|italic"
         android:layout_toEndOf="@id/appwidget_text"/>
 

@@ -57,7 +57,7 @@
 
     <!- -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="appwidget_text">Expiring Products: </string>
+    <string name="appwidget_text">Expiring Products:</string>
     <string name="add_widget">Add widget</string>
     <string name="title_share">Share</string>
     <string name="title_send">Send</string>
@@ -66,4 +66,5 @@
     <string name="search_product">Search Product</string>
     <string name="widget_empty_string">Good Work! No expiring products.</string>
     <string name="appwidget_number">0</string>
+    <string name="count_of_expiring_products">Count of expiring products</string>
 </resources>
