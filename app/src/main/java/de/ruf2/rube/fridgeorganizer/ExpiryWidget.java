@@ -37,6 +37,7 @@ public class ExpiryWidget extends AppWidgetProvider {
         Uri fridgeUri = FridgeContract.ProductEntry.buildProductWithExpiryEndDate(expiryDate.getTime());
         Cursor query = context.getContentResolver().query(fridgeUri, null, null, null, null);
         int expiringProductsNumber = query.getCount();
+        query.close();
 
 
 //        CharSequence widgetText = context.getString(R.string.appwidget_text);

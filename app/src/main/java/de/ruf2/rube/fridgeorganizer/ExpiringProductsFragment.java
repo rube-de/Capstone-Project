@@ -30,7 +30,6 @@ import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductAdapter;
 import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
 import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
-import io.realm.Realm;
 
 
 /**
@@ -42,7 +41,6 @@ import io.realm.Realm;
 public class ExpiringProductsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
 
-    private Realm mRealm;
 
     @Bind(R.id.recycler_view_product)
     RecyclerView mProductRecyclerView;
@@ -74,8 +72,6 @@ public class ExpiringProductsFragment extends Fragment implements LoaderManager.
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_expiring_products, container, false);
         ButterKnife.bind(this, fragmentView);
-        //get Realm
-        mRealm = Realm.getDefaultInstance();
         //set up recycler view
         setUpRecyclerView();
         return fragmentView;
@@ -118,7 +114,6 @@ public class ExpiringProductsFragment extends Fragment implements LoaderManager.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mRealm.close();
     }
 
     @Override

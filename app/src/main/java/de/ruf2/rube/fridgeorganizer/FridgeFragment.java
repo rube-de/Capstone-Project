@@ -21,15 +21,12 @@ import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.ProductAdapter;
 import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
 import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
-import de.ruf2.rube.fridgeorganizer.data.entities.Fridge;
-import io.realm.Realm;
 
 /**
  * Created by Bernhard Ruf on 06.10.2016.
  */
 public class FridgeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private Activity mContext;
-    private Realm mRealm;
 
 
     private RecyclerView mProductRecyclerView;
@@ -38,7 +35,6 @@ public class FridgeFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final String FRIDGE_ID = "fridgeId";
     private Long mFridgeId;
-    private Fridge mFridge;
     private String mFridgeName;
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -73,16 +69,12 @@ public class FridgeFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_fridge, container, false);
-        //get Realm and fridge
-        mRealm = Realm.getDefaultInstance();
-        mFridgeId = getArguments().getLong(FRIDGE_ID);
-        mFridge = mRealm.where(Fridge.class)
-                .equalTo("_id", mFridgeId).findFirst();
 
 
         Cursor fridgeCursor = mContext.getContentResolver().query(FridgeContract.FridgeEntry.buildFridgeUri(mFridgeId), null, null, null, null);
         fridgeCursor.moveToFirst();
         mFridgeName = fridgeCursor.getString(DataUtilities.COL_FRIDGE_NAME);
+        fridgeCursor.close();
         setFragmentTitle(mFridgeName);
         //Set up fridge list
         mProductRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view_product);
@@ -127,8 +119,6 @@ public class FridgeFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        mRealm.close();
     }
 
     @Override

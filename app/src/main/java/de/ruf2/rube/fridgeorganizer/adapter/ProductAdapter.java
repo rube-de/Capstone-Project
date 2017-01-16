@@ -62,6 +62,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             Cursor fridgeCursor = mContext.getContentResolver().query(FridgeContract.FridgeEntry.buildFridgeUri(fridgeId), null, null, null, null);
             fridgeCursor.moveToFirst();
             String fridgeName = fridgeCursor.getString(DataUtilities.COL_FRIDGE_NAME);
+            fridgeCursor.close();
             if (!StringUtils.isBlank(fridgeName)) {
                 holder.productFridge.setText(fridgeName);
             } else {

@@ -84,10 +84,7 @@ public class NotificationIntentService extends IntentService {
 
         Uri fridgeUri = FridgeContract.ProductEntry.buildProductWithExpiryEndDate(expiryDate.getTime());
         Cursor query = getContentResolver().query(fridgeUri, null, null, null, null);
-//        Realm realm = Realm.getDefaultInstance();
-//        RealmQuery<Product> query = realm.where(Product.class);
-//        query.lessThanOrEqualTo("expiryDate", date);
-//        RealmResults<Product> results = query.findAll();
+        query.close();
 
         if (query.getCount() > 0) {
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);

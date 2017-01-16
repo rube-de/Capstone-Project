@@ -19,7 +19,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
-import io.realm.Realm;
 import timber.log.Timber;
 
 
@@ -28,8 +27,6 @@ import timber.log.Timber;
  * Activities that contain this fragment must implement the
  * {@link AddFridgeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddFridgeFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class AddFridgeFragment extends Fragment {
     @Bind(R.id.button_add_fridge)
@@ -40,29 +37,10 @@ public class AddFridgeFragment extends Fragment {
         private OnFragmentInteractionListener mListener;
     private Activity mContext;
 
-    private Realm mRealm;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public AddFridgeFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddFridgeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddFridgeFragment newInstance(String param1, String param2) {
-        AddFridgeFragment fragment = new AddFridgeFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

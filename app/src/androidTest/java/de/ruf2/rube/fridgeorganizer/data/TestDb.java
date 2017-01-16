@@ -87,6 +87,7 @@ public class TestDb extends AndroidTestCase {
         assertTrue("Error: The database doesn't contain all of the required fridge entry columns",
                 fridgeColumnHashSet.isEmpty());
         db.close();
+        c.close();
     }
 
     public void testFridgeTable(){

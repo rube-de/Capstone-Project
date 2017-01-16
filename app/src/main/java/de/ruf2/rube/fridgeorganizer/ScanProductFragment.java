@@ -43,7 +43,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
 import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
-import io.realm.Realm;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -87,9 +86,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     Button mButtonNewFridge;
 
     private final String EAN_CONTENT = "eanContent";
-
-    private Realm mRealm;
-
     private Activity mContext;
 
     private DatePickerDialog mBuyDatePickerDialog;
@@ -126,7 +122,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
             mScan = getArguments().getBoolean(ARG_EAN);
         }
         mContext = getActivity();
-        mRealm = Realm.getDefaultInstance();
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
@@ -154,7 +149,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         View fragmentView = inflater.inflate(R.layout.fragment_scan_product, container, false);
         ButterKnife.bind(this, fragmentView);
 
-        mRealm = Realm.getDefaultInstance();
 
 
         setDateTimeField();
@@ -264,7 +258,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mRealm.close();
     }
 
 

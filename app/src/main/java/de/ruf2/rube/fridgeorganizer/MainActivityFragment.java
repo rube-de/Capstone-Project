@@ -29,7 +29,6 @@ import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
 import de.ruf2.rube.fridgeorganizer.adapter.FridgeAdapter;
 import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
 import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
-import io.realm.Realm;
 import timber.log.Timber;
 
 /**
@@ -37,7 +36,6 @@ import timber.log.Timber;
  */
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private ScanProductFragment.OnFragmentInteractionListener mListener;
-    private Realm mRealm;
     private RecyclerView mFridgeRecyclerView;
     private FridgeAdapter mFridgeAdapter;
     @Bind(R.id.edit_text_search)
@@ -63,8 +61,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         setFragmentTitle(getString(R.string.app_name));
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
-        //get db
-        mRealm = Realm.getDefaultInstance();
 
         //listen to search on keyboard
         mSearchText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -104,7 +100,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mRealm.close();
     }
 
     @Override

@@ -2,8 +2,13 @@ package de.ruf2.rube.fridgeorganizer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,17 +18,18 @@ import android.view.ViewGroup;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ruf2.rube.fridgeorganizer.adapter.DividerItemDecoration;
-import de.ruf2.rube.fridgeorganizer.adapter.ProductRecyclerViewAdapter;
-import de.ruf2.rube.fridgeorganizer.data.entities.Product;
-import io.realm.Case;
-import io.realm.Realm;
-import io.realm.RealmQuery;
+import de.ruf2.rube.fridgeorganizer.adapter.ProductAdapter;
+import de.ruf2.rube.fridgeorganizer.data.DataUtilities;
+import de.ruf2.rube.fridgeorganizer.data.FridgeContract;
 import timber.log.Timber;
 
 
@@ -35,8 +41,7 @@ import timber.log.Timber;
  * Use the {@link SearchResultFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchResultFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+public class SearchResultFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PRODUCT_NAME = "productName";
     private static final String EXPIRY_FROM = "expiryFrom";
@@ -44,7 +49,6 @@ public class SearchResultFragment extends Fragment {
     private static final String BUY_FROM = "buyFrom";
     private static final String BUY_TO = "buyTo";
 
-    // TODO: Rename and change types of parameters
     private String mParamName;
     private String mParamExpiryFrom;
     private String mParamExpiryTo;
@@ -52,26 +56,21 @@ public class SearchResultFragment extends Fragment {
     private String mParamBuyTo;
 
     private Activity mContext;
-    private Realm mRealm;
     @Bind(R.id.recycler_view_product)
     RecyclerView mProductRecyclerView;
 
     private OnFragmentInteractionListener mListener;
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    static final int PRODUCT_LOADER = 3;
+
+    private ProductAdapter mProductAdapter;
+
     public SearchResultFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param productName Parameter 1.
-     * @return A new instance of fragment SearchResultFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchResultFragment newInstance(String productName){
+    public static SearchResultFragment newInstance(String productName) {
         SearchResultFragment fragment = new SearchResultFragment();
         Bundle args = new Bundle();
         args.putString(PRODUCT_NAME, productName);
@@ -79,15 +78,7 @@ public class SearchResultFragment extends Fragment {
         return fragment;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param productName Parameter 1.
-     * @param expiryFrom  Parameter 2.
-     * @return A new instance of fragment SearchResultFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static SearchResultFragment newInstance(String productName, String expiryFrom,
                                                    String expiryTo, String buyFrom, String buyTo) {
         SearchResultFragment fragment = new SearchResultFragment();
@@ -125,11 +116,15 @@ public class SearchResultFragment extends Fragment {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_search_result, container, false);
         ButterKnife.bind(this, fragmentView);
-        //get Realm
-        mRealm = Realm.getDefaultInstance();
         //set up recycler view
         setUpRecyclerView();
         return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     public void setFragmentTitle(String title) {
@@ -139,7 +134,7 @@ public class SearchResultFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
 
@@ -163,7 +158,51 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mRealm.close();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String sortOrder = FridgeContract.ProductEntry.TABLE_NAME + "." + FridgeContract.ProductEntry.COLUMN_EXPIRE_DATE + " ASC";
+        Long expiryFrom = 0L;
+        Long expiryTo = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), 1).getTime();;
+        Long buyFrom = 0L;
+        Long buyTo = DateUtils.addDays(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), 1).getTime();
+        try {
+            if (!StringUtils.isBlank(mParamExpiryFrom) && !StringUtils.isBlank(mParamExpiryTo)) {
+                expiryFrom = Utilities.parseDate(mParamExpiryFrom).getTime();
+                expiryTo = Utilities.parseDate(mParamExpiryTo).getTime();
+            }
+            if (!StringUtils.isBlank(mParamBuyFrom) && !StringUtils.isBlank(mParamBuyTo)) {
+                buyFrom = Utilities.parseDate(mParamBuyFrom).getTime();
+                buyTo = Utilities.parseDate(mParamBuyTo).getTime();
+            }
+        } catch (ParseException e) {
+            Timber.d("could not parse date");
+            e.printStackTrace();
+        }
+        Uri fridgeUri = FridgeContract.ProductEntry.buildProductWithNameAndBuyAndExpiryDate(
+                mParamName,
+                buyFrom,
+                buyTo,
+                expiryFrom,
+                expiryTo);
+
+        return new CursorLoader(getActivity(),//context
+                fridgeUri,//uri
+                DataUtilities.PRODUCT_COLUMNS, //projection
+                null,//selection
+                null,//selection args
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     /**
@@ -181,23 +220,9 @@ public class SearchResultFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
-        RealmQuery<Product> query = mRealm.where(Product.class);
-        query.contains("name", mParamName, Case.INSENSITIVE);
-        try {
-            if (!StringUtils.isBlank(mParamExpiryFrom) && !StringUtils.isBlank(mParamExpiryTo)) {
-                query.between("expiryDate", Utilities.parseDate(mParamExpiryFrom),
-                        Utilities.parseDate(mParamExpiryTo));
-            }
-            if (!StringUtils.isBlank(mParamBuyFrom) && !StringUtils.isBlank(mParamBuyTo)) {
-                query.between("buyDate", Utilities.parseDate(mParamBuyFrom),
-                        Utilities.parseDate(mParamBuyTo));
-            }
-        } catch (ParseException e) {
-            Timber.d("could not parse date");
-            e.printStackTrace();
-        }
+        mProductAdapter = new ProductAdapter(getActivity(), true);
         mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mProductRecyclerView.setAdapter(new ProductRecyclerViewAdapter(getActivity(), query.findAll(), false));
+        mProductRecyclerView.setAdapter(mProductAdapter);
         mProductRecyclerView.setHasFixedSize(true);
         mProductRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getBaseContext(), DividerItemDecoration.VERTICAL_LIST));
     }
