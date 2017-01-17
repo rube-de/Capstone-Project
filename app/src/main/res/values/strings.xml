@@ -67,4 +67,10 @@
     <string name="widget_empty_string">Good Work! No expiring products.</string>
     <string name="appwidget_number">0</string>
     <string name="count_of_expiring_products">Count of expiring products</string>
+    <string name="snack_new_product_created">"New product created: "</string>
+    <string name="no_scan_data_received">No scan data received!</string>
+    <string name="snackbar_new_fridge">"New fridge created: "</string>
+    <string name="snack_delete_fridge">"Deleted fridge: "</string>
+    <string name="snack_click_product">"Click product: "</string>
+    <string name="snack_deleted_product">"Deleted product: "</string>
 </resources>

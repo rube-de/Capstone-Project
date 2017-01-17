@@ -52,10 +52,6 @@ public class ExpiringProductsFragment extends Fragment implements LoaderManager.
 
     private ProductAdapter mProductAdapter;
 
-    public ExpiringProductsFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

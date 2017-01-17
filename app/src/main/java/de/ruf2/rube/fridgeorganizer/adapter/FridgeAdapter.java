@@ -81,7 +81,7 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.MyViewHold
 
         @Override
         public boolean onLongClick(View v) {
-            Snackbar.make(v, "deleted fridge: " + fridgeName.getText(), Snackbar.LENGTH_LONG)
+            Snackbar.make(v, mContext.getString(R.string.snack_delete_fridge) + fridgeName.getText(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             String[] selectionArgs = new String[]{Long.toString(fridgeId)};
             String selection = "_ID = ?";

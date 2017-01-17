@@ -58,15 +58,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_settings, container, false);
-//        setFragmentTitle("Settings");
-//        return view;
-//    }
-
     public void setFragmentTitle(String title) {
         if (mListener != null) {
             mListener.onFragmentInteraction(title);

@@ -86,7 +86,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
                 Timber.d("on click called: " + productName);
 
-                Snackbar.make(v, "click product: " + productName, Snackbar.LENGTH_LONG)
+                Snackbar.make(v, mContext.getString(R.string.snack_click_product) + productName, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -112,7 +112,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
         @Override
         public boolean onLongClick(View v) {
-            Snackbar.make(v, "deleted product: " + productName.getText(), Snackbar.LENGTH_LONG)
+            Snackbar.make(v, mContext.getString(R.string.snack_deleted_product) + productName.getText(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             String[] selectionArgs = new String[]{Long.toString(productId)};
             String selection = "_ID = ?";
@@ -130,7 +130,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
-//        mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     public Cursor getCursor() {

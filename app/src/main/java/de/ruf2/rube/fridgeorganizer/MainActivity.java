@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import io.realm.Realm;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements AddFridgeFragment.OnFragmentInteractionListener, FridgeFragment.OnFragmentInteractionListener,
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements AddFridgeFragment
 
     private Activity mContext;
 
-    private Realm mRealm;
 
     public final static String FRIDGE_KEY = "fridgekey";
 
@@ -51,19 +49,6 @@ public class MainActivity extends AppCompatActivity implements AddFridgeFragment
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mRealm = Realm.getDefaultInstance();
-
-        //TODO: disabled for now
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        assert fab != null;
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent addIntent = new Intent();
-//                addIntent.setClass(getApplicationContext(), AddProductActivity.class);
-//                startActivity(addIntent);
-//            }
-//        });
 
         mTitle = mDrawerTitle = getTitle().toString();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -304,7 +289,6 @@ public class MainActivity extends AppCompatActivity implements AddFridgeFragment
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mRealm.close();
     }
 
 

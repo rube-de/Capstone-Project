@@ -141,7 +141,7 @@ public class AddFridgeFragment extends Fragment {
         mContext.getContentResolver().insert(FridgeContract.FridgeEntry.CONTENT_URI, fridgeValues);
 
 
-        Snackbar.make(view, "new fridge created: " + fridgeName, Snackbar.LENGTH_LONG)
+        Snackbar.make(view, getString(R.string.snackbar_new_fridge) + fridgeName, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 }

@@ -154,7 +154,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         setDateTimeField();
 
         //init fridge spinner
-//        RealmResults<Fridge> fridges = mRealm.where(Fridge.class).findAll();
 
         String[] columns = {FridgeContract.FridgeEntry.COLUMN_NAME};
         int[] toViews = {R.id.checked_text_spinner};
@@ -304,7 +303,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
                 mContext.getContentResolver().insert(FridgeContract.ProductEntry.CONTENT_URI, productValues);
 
 
-                Snackbar.make(view, "new product created: " + productName, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, getString(R.string.snack_new_product_created) + productName, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         } catch (ParseException e) {
@@ -382,7 +381,7 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
             mEditTextEan.setText(scanningResult.getContents());
         } else {
             Toast toast = Toast.makeText(getActivity(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
+                    R.string.no_scan_data_received, Toast.LENGTH_SHORT);
             toast.show();
         }
     }
@@ -391,7 +390,6 @@ public class ScanProductFragment extends RxFragment implements Observer<String>,
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
-                //TODO: error handling
                 String productName = Utilities.fetchProduct(mEditTextEan.getText().toString());
                 subscriber.onNext(productName);
                 subscriber.onCompleted();
